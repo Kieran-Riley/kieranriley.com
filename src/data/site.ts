@@ -22,7 +22,7 @@ export const site = {
   // verification here. (Verifying with a DNS record works too and needs no change.)
   googleSiteVerification: null as string | null,
   defaultDescription:
-    'Kieran Riley is a freelance full-stack software developer in Newcastle, UK, helping founders and businesses build, improve and launch software — including apps started with AI tools like Lovable, Replit and Cursor.',
+    'Kieran Riley is a freelance full-stack software developer in Newcastle, UK. I help people build, fix and launch software, including apps started with AI tools like Lovable, Replit and Cursor.',
   social: [
     { label: 'LinkedIn', href: 'https://www.linkedin.com/in/kieran-riley-b76283166/', icon: 'linkedin' },
     { label: 'GitHub', href: 'https://github.com/kieran-riley', icon: 'github' },

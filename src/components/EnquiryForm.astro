@@ -24,6 +24,9 @@ import { HONEYPOT_FIELD } from '../lib/enquiry/handler';
     data-enquiry-form
     aria-describedby="form-required-note"
   >
+    <noscript>
+      <p class="form__alert">The form needs JavaScript to send. You can also message me on <a href="https://www.linkedin.com/in/kieran-riley-b76283166/">LinkedIn</a>.</p>
+    </noscript>
     <p id="form-required-note" class="form__note">Fields marked <span aria-hidden="true">*</span><span class="visually-hidden">with an asterisk</span> are required.</p>
 
     <div class="form__alert" data-form-alert role="alert" tabindex="-1" hidden></div>
@@ -130,8 +133,7 @@ import { HONEYPOT_FIELD } from '../lib/enquiry/handler';
         maxlength={limits.description}
         aria-describedby="f-description-hint f-description-error"></textarea>
       <p class="field__hint" id="f-description-hint">
-        What are you trying to achieve, and where are you up to? Don’t worry about technical detail — plain English is
-        perfect.
+        What are you trying to do, and where are you up to? Plain English is fine.
       </p>
       <p class="field__error" id="f-description-error" data-error-for="description"></p>
     </div>
@@ -196,7 +198,7 @@ import { HONEYPOT_FIELD } from '../lib/enquiry/handler';
     <Icon name="circle-check" size={40} strokeWidth={1.75} />
     <h3>Enquiry sent</h3>
     <p>{successMessage}</p>
-    <p class="muted">A confirmation is on its way to your inbox. If you don’t see it, check your spam folder.</p>
+    <p class="muted">There’s a confirmation in your inbox. If you can’t see it, check your spam folder.</p>
   </div>
 </div>
 
@@ -281,8 +283,8 @@ import { HONEYPOT_FIELD } from '../lib/enquiry/handler';
       if (extras && names.some((n) => extras.querySelector(`[name="${n}"]`))) extras.open = true;
       showAlert(
         names.length === 1
-          ? 'There’s one thing to fix before sending — please check the highlighted field.'
-          : `There are ${names.length} things to fix before sending — please check the highlighted fields.`,
+          ? 'Please check the highlighted field.'
+          : `Please check the ${names.length} highlighted fields.`,
       );
     };
 
@@ -323,7 +325,7 @@ import { HONEYPOT_FIELD } from '../lib/enquiry/handler';
         // Turnstile tokens are single use; get a fresh one for the next attempt.
         (window as unknown as { turnstile?: { reset: () => void } }).turnstile?.reset();
       } catch {
-        showAlert('Sorry, your enquiry couldn’t be sent — please check your connection and try again.');
+        showAlert('Sorry, your enquiry couldn’t be sent. Please check your connection and try again.');
       } finally {
         submit.disabled = false;
         submit.removeAttribute('aria-busy');

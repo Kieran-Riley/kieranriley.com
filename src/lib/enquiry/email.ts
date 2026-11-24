@@ -64,7 +64,10 @@ const wrap = (inner: string) => `<!doctype html>
 <div style="max-width:600px;margin:0 auto;background:#ffffff;border-radius:12px;padding:32px;border:1px solid #e4ded4">${inner}</div>
 </body></html>`;
 
-export function notificationEmail(e: Enquiry, opts: { from: string; to: string }): EmailMessage {
+export function notificationEmail(
+  e: Enquiry,
+  opts: { from: string; to: string; possibleSpam?: boolean },
+): EmailMessage {
   const rows = enquiryRows(e);
   const type = labelFor(enquiryTypes, e.type) ?? e.type;
 
@@ -81,7 +84,7 @@ export function notificationEmail(e: Enquiry, opts: { from: string; to: string }
 
   const html = wrap(`
 <p style="margin:0 0 4px;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:#5a6170">New enquiry</p>
-<h1 style="margin:0 0 20px;font-size:22px">${escapeHtml(e.name)} — ${escapeHtml(type)}</h1>
+<h1 style="margin:0 0 20px;font-size:22px">${escapeHtml(e.name)}: ${escapeHtml(type)}</h1>
 <table role="presentation" style="width:100%;border-collapse:collapse;font-size:15px">
 ${rows
   .map(
@@ -98,7 +101,7 @@ ${rows
     from: opts.from,
     to: [opts.to],
     replyTo: e.email,
-    subject: subjectSafe(`New enquiry: ${type} — ${e.name}`, 120),
+    subject: subjectSafe(`${opts.possibleSpam ? '[Possible spam] ' : ''}New enquiry from ${e.name}: ${type}`, 140),
     text,
     html,
   };
@@ -107,22 +110,22 @@ ${rows
 /**
  * The automatic confirmation sent to the visitor. To avoid the form being used
  * to send arbitrary content to third parties, it only includes the visitor's
- * first name and fixed text — never their message.
+ * first name and fixed text, never their message.
  */
 export function confirmationEmail(e: Enquiry, opts: { from: string; replyTo?: string }): EmailMessage {
   const firstName = subjectSafe(e.name.split(' ')[0] ?? '', 40);
   const greeting = firstName ? `Hi ${firstName},` : 'Hi,';
   const paragraphs = [
-    `Thanks for getting in touch! I’ve received your enquiry and I’ll review it properly before getting back to you — I aim to reply within ${site.responseTime}.`,
-    'If there’s anything you’d like to add in the meantime, just reply to this email.',
+    `Thanks for getting in touch. I’ve got your enquiry and I’ll get back to you within ${site.responseTime}.`,
+    'If you want to add anything in the meantime, just reply to this email.',
     'Speak soon,',
   ];
 
-  const text = [greeting, '', ...paragraphs.flatMap((p) => [p, '']), site.name, site.role].join('\n');
+  const text = [greeting, '', ...paragraphs.flatMap((p) => [p, '']), site.shortName].join('\n');
   const html = wrap(`
 <p style="margin:0 0 16px">${escapeHtml(greeting)}</p>
 ${paragraphs.map((p) => `<p style="margin:0 0 16px">${escapeHtml(p)}</p>`).join('\n')}
-<p style="margin:0">${escapeHtml(site.name)}<br><span style="color:#5a6170">${escapeHtml(site.role)}</span></p>`);
+<p style="margin:0">${escapeHtml(site.shortName)}</p>`);
 
   return {
     from: opts.from,

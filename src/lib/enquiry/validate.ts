@@ -106,7 +106,7 @@ export function validateEnquiry(input: RawInput): ValidationResult {
   else if (description.length < limits.descriptionMin)
     errors.description = 'Could you add a bit more detail? A couple of sentences is plenty.';
   else if (description.length > limits.description)
-    errors.description = `Please keep this under ${limits.description.toLocaleString('en-GB')} characters — we can go into more detail later.`;
+    errors.description = `Please keep this under ${limits.description.toLocaleString('en-GB')} characters. We can go into more detail later.`;
 
   if (company.length > limits.company) errors.company = `Please keep this under ${limits.company} characters.`;
 

@@ -55,7 +55,7 @@ export const aiHelpAreas = [
   { value: 'fixing', label: 'Fixing bugs or things that keep breaking' },
   { value: 'mobile', label: 'Turning it into a mobile app' },
   { value: 'guidance', label: 'Guidance so I can keep building myself' },
-  { value: 'unsure', label: 'Not sure — I’d like advice' },
+  { value: 'unsure', label: 'Not sure, I’d like advice' },
 ] as const;
 
 /** Extra question for advice/support enquiries. */

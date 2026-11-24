@@ -2,6 +2,7 @@ import { describe, expect, it, vi } from 'vitest';
 import { validateEnquiry, normaliseUrl, clean } from '../src/lib/enquiry/validate';
 import { processEnquiry, RateLimiter, HONEYPOT_FIELD } from '../src/lib/enquiry/handler';
 import { confirmationEmail, notificationEmail, escapeHtml, type EmailMessage } from '../src/lib/enquiry/email';
+import { spamScore } from '../src/lib/enquiry/spam';
 
 const valid = {
   name: 'Ada Lovelace',
@@ -10,11 +11,14 @@ const valid = {
   description: 'I built a booking app in Lovable and need help getting it ready for real users.',
 };
 
-function jsonRequest(body: unknown) {
+// A realistic page-load timestamp (well over the minimum fill time ago).
+const loadedAt = () => String(Date.now() - 60_000);
+
+function jsonRequest(body: Record<string, unknown>) {
   return new Request('http://localhost/api/enquiry', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-    body: JSON.stringify(body),
+    body: JSON.stringify({ startedAt: loadedAt(), ...body }),
   });
 }
 
@@ -84,6 +88,13 @@ describe('validateEnquiry', () => {
   });
 });
 
+describe('spamScore', () => {
+  it('ignores ordinary enquiries', () => {
+    expect(spamScore(valid.description)).toBe(0);
+    expect(spamScore('We need to modernise our old stock control system, built in PHP.')).toBe(0);
+  });
+});
+
 describe('emails', () => {
   it('escapes HTML in the notification and sets reply-to', () => {
     const r = validateEnquiry({ ...valid, name: '<script>x</script>' });
@@ -131,6 +142,38 @@ describe('processEnquiry', () => {
   it('silently drops submissions made too quickly after page load', async () => {
     const { config, sent } = setup({ now: () => 10_000 });
     const res = await processEnquiry(jsonRequest({ ...valid, startedAt: '9000' }), '1.2.3.4', config);
+    expect(res.body.ok).toBe(true);
+    expect(sent).toHaveLength(0);
+  });
+
+  it('rejects submissions that skipped the page’s JavaScript', async () => {
+    const { config, sent } = setup();
+    const res = await processEnquiry(jsonRequest({ ...valid, startedAt: '' }), '1.2.3.4', config);
+    expect(res.status).toBe(400);
+    expect(sent).toHaveLength(0);
+  });
+
+  it('quietly drops obvious sales spam', async () => {
+    const { config, sent } = setup();
+    const description = 'Dear website owner, we can get you on the first page of Google with our SEO backlinks.';
+    const res = await processEnquiry(jsonRequest({ ...valid, type: 'other', description }), '1.2.3.4', config);
+    expect(res.body.ok).toBe(true);
+    expect(sent).toHaveLength(0);
+  });
+
+  it('delivers borderline enquiries marked as possible spam, without a confirmation', async () => {
+    const { config, sent } = setup();
+    const description = 'I need a new website for my bakery and would like it to have good SEO.';
+    const res = await processEnquiry(jsonRequest({ ...valid, type: 'new-build', description }), '1.2.3.4', config);
+    expect(res.body.ok).toBe(true);
+    expect(sent).toHaveLength(1);
+    expect(sent[0].subject).toMatch(/^\[Possible spam\]/);
+  });
+
+  it('quietly drops link-stuffed messages', async () => {
+    const { config, sent } = setup();
+    const description = 'See https://a.example https://b.example https://c.example https://d.example now';
+    const res = await processEnquiry(jsonRequest({ ...valid, description }), '1.2.3.4', config);
     expect(res.body.ok).toBe(true);
     expect(sent).toHaveLength(0);
   });

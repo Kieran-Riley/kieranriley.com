@@ -1,5 +1,6 @@
 import { successMessage } from '../../data/enquiry';
 import { confirmationEmail, notificationEmail, type SendEmail } from './email';
+import { linkCount, spamScore } from './spam';
 import { validateEnquiry, getString, type FieldErrors, type RawInput } from './validate';
 
 export interface EnquiryConfig {
@@ -21,8 +22,10 @@ export interface EnquiryResponseBody {
 
 /** Minimum time (ms) between the form loading and being submitted. Faster than this is almost certainly a bot. */
 export const MIN_FILL_TIME_MS = 3000;
+/** Hidden from people. Bots fill it in. */
 export const HONEYPOT_FIELD = 'fax_number';
-const MAX_LINKS_IN_DESCRIPTION = 5;
+/** More links than this in the description is treated as spam. */
+const MAX_LINKS_IN_DESCRIPTION = 3;
 
 /**
  * A small fixed-window rate limiter kept in memory. This is enough for a single
@@ -32,8 +35,8 @@ const MAX_LINKS_IN_DESCRIPTION = 5;
 export class RateLimiter {
   private hits = new Map<string, { count: number; resetAt: number }>();
   constructor(
-    private limit = 5,
-    private windowMs = 15 * 60 * 1000,
+    private limit = 3,
+    private windowMs = 60 * 60 * 1000,
     private now: () => number = Date.now,
   ) {}
 
@@ -124,8 +127,22 @@ export async function processEnquiry(
   // so they don't learn what gave them away.
   const fakeSuccess: HandlerResult = { status: 200, body: { ok: true, message: successMessage } };
   if (getString(input, HONEYPOT_FIELD).trim()) return fakeSuccess;
+
+  // `startedAt` is filled in by JavaScript when the page loads. Most spam bots
+  // post straight to the endpoint without running it, so a missing value is
+  // rejected, and a form filled in faster than a person could is dropped.
   const startedAt = Number(getString(input, 'startedAt'));
-  if (Number.isFinite(startedAt) && startedAt > 0 && now() - startedAt < MIN_FILL_TIME_MS) return fakeSuccess;
+  if (!Number.isFinite(startedAt) || startedAt <= 0) {
+    return {
+      status: 400,
+      body: {
+        ok: false,
+        message: 'Sorry, the form needs JavaScript turned on to send. You can also message me on LinkedIn.',
+      },
+    };
+  }
+  const elapsed = now() - startedAt;
+  if (elapsed < MIN_FILL_TIME_MS || elapsed < 0) return fakeSuccess;
 
   if (config.turnstileSecret) {
     const token = getString(input, 'cf-turnstile-response');
@@ -149,16 +166,14 @@ export async function processEnquiry(
   }
 
   const enquiry = result.data;
-  if ((enquiry.description.match(/https?:\/\//gi) ?? []).length > MAX_LINKS_IN_DESCRIPTION) {
-    return {
-      status: 422,
-      body: {
-        ok: false,
-        message: 'Please check the highlighted fields and try again.',
-        errors: { description: 'Please include fewer links — you can share more once we’re talking.' },
-      },
-    };
+  if (linkCount(enquiry.description) > MAX_LINKS_IN_DESCRIPTION) return fakeSuccess;
+
+  const score = spamScore([enquiry.name, enquiry.company ?? '', enquiry.description].join('\n'));
+  if (score >= 2) {
+    log.info(`[enquiry] Dropped likely spam from ${enquiry.email}`);
+    return fakeSuccess;
   }
+  const possibleSpam = score === 1;
 
   if (!config.sendEmail || !config.toEmail || !config.fromEmail) {
     log.error('[enquiry] Email is not configured. Set RESEND_API_KEY, ENQUIRY_TO_EMAIL and ENQUIRY_FROM_EMAIL.');
@@ -172,7 +187,9 @@ export async function processEnquiry(
   }
 
   try {
-    await config.sendEmail(notificationEmail(enquiry, { from: config.fromEmail, to: config.toEmail }));
+    await config.sendEmail(
+      notificationEmail(enquiry, { from: config.fromEmail, to: config.toEmail, possibleSpam }),
+    );
   } catch (err) {
     log.error('[enquiry] Failed to send notification email', err);
     return {
@@ -186,7 +203,9 @@ export async function processEnquiry(
   }
 
   // The enquiry has reached me at this point, so a failed confirmation shouldn't
-  // be reported to the visitor as a failed submission.
+  // be reported to the visitor as a failed submission. Possible spam doesn't
+  // get a confirmation, so the form can't be used to email strangers.
+  if (possibleSpam) return { status: 200, body: { ok: true, message: successMessage } };
   try {
     await config.sendEmail(confirmationEmail(enquiry, { from: config.fromEmail, replyTo: config.toEmail }));
   } catch (err) {

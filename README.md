@@ -41,13 +41,17 @@ Page copy is in `src/pages/index.astro` and `src/pages/work-with-me.astro`. Phot
 1. Inputs are validated and cleaned on the server. The browser runs the same checks for quick feedback.
 2. A notification email goes to `ENQUIRY_TO_EMAIL` via [Resend](https://resend.com), with reply-to set to the visitor.
 3. The visitor gets a confirmation email. It contains only fixed text and their first name, so the form can't be used to send arbitrary content to third parties.
-4. Spam protection:
-   - a honeypot field
-   - a minimum time to fill in the form
-   - a per-IP rate limit (in memory, 5 per 15 minutes)
-   - Astro's cross-site origin check
-   - optional [Cloudflare Turnstile](https://www.cloudflare.com/products/turnstile/)
-5. Without JavaScript the form still works. It does a normal POST and redirects to `/enquiry-sent`.
+4. Spam protection (`src/lib/enquiry/handler.ts` and `spam.ts`):
+   - **Honeypot:** a hidden field that people never see but bots fill in. Those submissions are quietly dropped.
+   - **JavaScript check:** the page adds a timestamp when it loads. Posts without one (most bots) are rejected, and forms filled in under 3 seconds are dropped.
+   - **Spam phrases:** messages that match two or more common spam patterns (SEO offers, crypto, "dear website owner" and so on) are dropped. One match still reaches you, with `[Possible spam]` in the subject and no confirmation sent. Add phrases to `spam.ts` if anything gets through.
+   - **Links:** messages with more than 3 links are dropped.
+   - **Rate limit:** 3 enquiries per hour from one IP address (in memory).
+   - **Origin check:** Astro rejects posts from other websites.
+   - **Cloudflare Turnstile (optional):** a free, mostly invisible challenge. Worth turning on if spam still gets through.
+
+   Dropped spam gets a normal "thanks" response, so bots can't tell what caught them.
+5. The form needs JavaScript to send. Visitors without it see a note pointing them to LinkedIn.
 
 ## Environment variables
 
