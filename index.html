@@ -8,7 +8,7 @@
     <meta name="description" content="I’m Kieran, a full-stack developer in Newcastle with about six years’ experience at startups and scale-ups. I help people build new software, finish apps started with AI, and update older systems." />
     <link rel="canonical" href="https://kieranriley.com/" />
     <meta name="author" content="Kieran Riley" />
-    <meta name="theme-color" content="#ffffff" />
+    <meta name="theme-color" content="#0d0d0e" />
     <link rel="icon" href="/favicon.ico" sizes="any" />
 
     <meta property="og:type" content="website" />
@@ -24,7 +24,7 @@
     <meta name="twitter:card" content="summary_large_image" />
 
     <link rel="preload" href="/assets/fonts/inter-var.woff2" as="font" type="font/woff2" crossorigin />
-    <link rel="preload" as="image" href="/assets/img/hero-1400.webp" imagesrcset="/assets/img/hero-800.webp 800w, /assets/img/hero-1400.webp 1400w, /assets/img/hero-2200.webp 2200w" imagesizes="(min-width: 1280px) 1200px, 94vw" />
+    <link rel="preload" as="image" href="/assets/img/hero-1400.webp" imagesrcset="/assets/img/hero-800.webp 800w, /assets/img/hero-1400.webp 1400w, /assets/img/hero-2200.webp 2200w" imagesizes="100vw" />
     <link rel="stylesheet" href="/assets/css/styles.css" />
     <script src="/assets/js/main.js" defer></script>
 
@@ -54,7 +54,7 @@
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
 
-    <header class="site-header">
+    <header class="site-header site-header--overlay">
       <div class="container site-header__inner">
         <a class="logo" href="/" aria-label="Kieran Riley, home">Kieran Riley<span>.</span></a>
         <nav aria-label="Main">
@@ -68,35 +68,35 @@
     </header>
 
     <main id="main">
-      <section class="hero" aria-labelledby="hero-title">
-        <div class="container">
-          <p class="kicker" data-load>Software developer in Newcastle</p>
-          <h1 id="hero-title" class="display reveal-lines">
-            <span class="line" style="--i: 0"><span>Software developer.</span></span>
-            <span class="line" style="--i: 1"><span>Product thinker.</span></span>
-            <span class="line soft" style="--i: 2"><span>Here to help you build what’s next.</span></span>
-          </h1>
+      <section class="hero-photo dark" aria-labelledby="hero-title">
+        <div class="hero-photo__bg" data-parallax aria-hidden="true">
+          <picture>
+            <source type="image/webp" srcset="/assets/img/hero-800.webp 800w, /assets/img/hero-1400.webp 1400w, /assets/img/hero-2200.webp 2200w" sizes="100vw" />
+            <img src="/assets/img/hero-1400.jpg" width="1400" height="1867" alt="" fetchpriority="high" />
+          </picture>
+        </div>
+        <div class="hero-photo__overlay" aria-hidden="true"></div>
 
-          <div class="hero__bottom">
+        <div class="container hero-photo__inner">
+          <div class="hero-photo__content">
+            <p class="kicker" data-load>Software developer in Newcastle</p>
+            <h1 id="hero-title" class="display reveal-lines">
+              <span class="line" style="--i: 0"><span>Software developer.</span></span>
+              <span class="line" style="--i: 1"><span>Product thinker.</span></span>
+              <span class="line soft" style="--i: 2"><span>Here to help you build what’s next.</span></span>
+            </h1>
             <p class="lede" data-load style="--i: 1">
               New idea, something you’ve started with AI, or a system that’s showing its age. I can help with the next
               step.
             </p>
             <div class="actions" data-load style="--i: 2">
-              <a class="btn" href="/work-with-me">
+              <a class="btn btn--light" href="/work-with-me">
                 Work with me
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg>
               </a>
               <a class="link" href="#about">More about me</a>
             </div>
           </div>
-
-          <figure class="hero-media">
-            <picture>
-              <source type="image/webp" srcset="/assets/img/hero-800.webp 800w, /assets/img/hero-1400.webp 1400w, /assets/img/hero-2200.webp 2200w" sizes="(min-width: 1280px) 1200px, 94vw" />
-              <img src="/assets/img/hero-1400.jpg" width="1400" height="1867" alt="Kieran, seen from behind, looking out over a city at sunset" fetchpriority="high" />
-            </picture>
-          </figure>
         </div>
       </section>
 

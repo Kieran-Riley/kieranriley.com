@@ -41,7 +41,8 @@
 
   // Header: solid once you scroll, tucks away when scrolling down, returns when scrolling up.
   const header = document.querySelector('.site-header');
-  const heroMedia = document.querySelector('.hero-media');
+  // The photo that drifts and un-zooms as you scroll (full-bleed hero or the photo band).
+  const heroMedia = document.querySelector('[data-parallax]') || document.querySelector('.hero-media');
   const heroImg = heroMedia && heroMedia.querySelector('img');
   let lastY = window.scrollY;
   let ticking = false;
