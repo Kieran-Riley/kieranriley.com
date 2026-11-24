@@ -1,0 +1,667 @@
+---
+import { Picture } from 'astro:assets';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Icon from '../components/Icon.astro';
+import EnquiryForm from '../components/EnquiryForm.astro';
+import { site } from '../data/site';
+import { principles, services } from '../data/services';
+import portraitSquare from '../assets/images/kr-square.png';
+
+const title = 'Work With Me — Freelance Software Development & AI App Support | Kieran Riley';
+const description =
+  'Hire an independent full-stack developer in Newcastle, UK. Custom software and MVPs, help taking Lovable, Replit, Bolt or Cursor apps further, legacy modernisation, code reviews and ongoing technical support.';
+
+const pageUrl = new URL('/work-with-me', Astro.site).toString();
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebPage',
+  url: pageUrl,
+  name: title,
+  description,
+  inLanguage: 'en-GB',
+  mainEntity: {
+    '@type': 'OfferCatalog',
+    name: 'Software development services',
+    itemListElement: services.map((s) => ({
+      '@type': 'Offer',
+      itemOffered: {
+        '@type': 'Service',
+        name: s.title,
+        description: s.tagline,
+        url: `${pageUrl}#${s.id}`,
+        areaServed: { '@type': 'Country', name: 'United Kingdom' },
+        provider: { '@type': 'Person', '@id': new URL('/#person', Astro.site).toString(), name: site.name },
+      },
+    })),
+  },
+};
+
+const nextSteps = [
+  {
+    title: 'Tell me what you’re working on',
+    body: 'Share as much or as little as you like. Plain English is perfect — you don’t need a technical spec.',
+  },
+  {
+    title: 'I’ll get back to you',
+    body: `I’ll read your enquiry properly and aim to reply within ${site.responseTime}, usually with a few questions.`,
+  },
+  {
+    title: 'We talk it through',
+    body: 'If it looks like a good fit, we’ll have a relaxed conversation about what you need and agree sensible next steps together.',
+  },
+];
+
+const aiToolsList = ['Lovable', 'Replit', 'Bolt', 'Cursor', 'Codex'];
+---
+
+<BaseLayout title={title} description={description} jsonLd={jsonLd}>
+  <!-- Hero -->
+  <section class="page-hero on-night" aria-labelledby="wwm-title">
+    <div class="container page-hero__inner">
+      <div class="page-hero__content">
+        <p class="eyebrow hero-anim" style="--d: 0s">Work with me</p>
+        <h1 id="wwm-title" class="h-display hero-anim" style="--d: 0.1s">
+          Let’s build something that works <span class="accent">for you.</span>
+        </h1>
+        <div class="page-hero__copy hero-anim" style="--d: 0.2s">
+          <p>Got an idea? Already building something with AI? Working with an outdated system?</p>
+          <p>
+            Whether you need an application built from scratch, help taking an existing project further or simply an
+            experienced second pair of eyes, I’d love to hear what you’re working on.
+          </p>
+        </div>
+        <div class="btn-row hero-anim" style="--d: 0.3s">
+          <a class="btn btn--light" href="#enquire">Tell me about your project <Icon name="arrow-down" /></a>
+          <a class="btn btn--ghost-light" href="#services">See how I can help</a>
+        </div>
+      </div>
+
+      <figure class="page-hero__photo hero-anim" style="--d: 0.2s">
+        <Picture
+          src={portraitSquare}
+          alt="Kieran Riley, freelance software developer"
+          widths={[320, 520, 800, 1040]}
+          sizes="(min-width: 60em) 420px, (min-width: 40em) 50vw, 80vw"
+          formats={['webp']}
+          quality={74}
+          loading="eager"
+        />
+        <figcaption>
+          <strong>You’ll work directly with me</strong>
+          <span>No account managers, no handovers.</span>
+        </figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- Services -->
+  <section id="services" class="section services" aria-labelledby="services-title">
+    <div class="container">
+      <div class="section-head">
+        <p class="eyebrow" data-reveal>Services</p>
+        <h2 id="services-title" class="h-section" data-reveal>Four ways I can help</h2>
+        <p class="lede" data-reveal>
+          Every project is different, so these aren’t fixed packages — they’re starting points. If you’re not sure where
+          you fit, just get in touch and we’ll work it out together.
+        </p>
+        <nav class="service-nav" aria-label="Services" data-reveal>
+          <ul>
+            {
+              services.map((s) => (
+                <li>
+                  <a href={`#${s.id}`}>
+                    <span aria-hidden="true">{s.number}</span> {s.title}
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </nav>
+      </div>
+
+      <div class="service-list">
+        {
+          services.map((s) => (
+            <article id={s.id} class:list={['service', { 'service--featured': s.featured }]} aria-labelledby={`${s.id}-title`}>
+              <header class="service__head" data-reveal>
+                <span class="service__number" aria-hidden="true">
+                  {s.number}
+                </span>
+                {s.featured && <span class="service__badge">For AI builders</span>}
+                <h3 id={`${s.id}-title`} class="service__title">
+                  {s.title}
+                </h3>
+                <p class="service__tagline">{s.tagline}</p>
+                {s.featured && (
+                  <ul class="service__tools" aria-label="Works with tools like">
+                    {aiToolsList.map((t) => (
+                      <li>{t}</li>
+                    ))}
+                    <li>and similar</li>
+                  </ul>
+                )}
+              </header>
+              <div class="service__body" data-reveal>
+                {s.intro.map((p) => (
+                  <p>{p}</p>
+                ))}
+                <h4 class="service__examples-title">{s.examplesHeading}</h4>
+                <ul class="tick-list service__examples">
+                  {s.examples.map((e) => (
+                    <li>{e}</li>
+                  ))}
+                </ul>
+                {s.note && (
+                  <p class="service__note">
+                    <Icon name="circle-alert" size={18} />
+                    <span>{s.note}</span>
+                  </p>
+                )}
+                <a class="service__cta" href="#enquire">
+                  Talk to me about this <Icon name="arrow-right" size={18} />
+                </a>
+              </div>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- Principles -->
+  <section class="section section--alt" aria-labelledby="principles-title">
+    <div class="container">
+      <div class="section-head">
+        <p class="eyebrow" data-reveal>How I work</p>
+        <h2 id="principles-title" class="h-section" data-reveal>Your project, your control — with support when you need it</h2>
+      </div>
+      <ul class="principles" role="list">
+        {
+          principles.map((p, i) => (
+            <li class="principle" data-reveal style={`--reveal-delay: ${(i % 3) * 0.06}s`}>
+              <span class="principle__n" aria-hidden="true">
+                {String(i + 1).padStart(2, '0')}
+              </span>
+              <h3>{p.title}</h3>
+              <p>{p.body}</p>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <!-- Enquiry -->
+  <section id="enquire" class="section enquire" aria-labelledby="enquire-title">
+    <div class="container enquire__grid">
+      <div class="enquire__intro">
+        <p class="eyebrow" data-reveal>Get in touch</p>
+        <h2 id="enquire-title" class="h-section" data-reveal>Tell me about your project</h2>
+        <p class="lede" data-reveal>
+          No commitment and no hard sell — just an honest conversation about what you need and whether I’m the right
+          person to help.
+        </p>
+        <ol class="steps" role="list" data-reveal>
+          {
+            nextSteps.map((step, i) => (
+              <li>
+                <span class="steps__n" aria-hidden="true">
+                  {i + 1}
+                </span>
+                <div>
+                  <h3>{step.title}</h3>
+                  <p>{step.body}</p>
+                </div>
+              </li>
+            ))
+          }
+        </ol>
+      </div>
+      <div class="enquire__form" data-reveal>
+        <EnquiryForm />
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  /* ---------- Hero ---------- */
+  .page-hero {
+    position: relative;
+    overflow: hidden;
+    padding-block: clamp(7rem, 14vw, 10rem) clamp(4rem, 8vw, 6rem);
+    background:
+      radial-gradient(50rem 30rem at 80% 0%, rgb(43 89 195 / 0.28), transparent 70%),
+      radial-gradient(40rem 26rem at 10% 110%, rgb(233 120 90 / 0.14), transparent 70%),
+      var(--night);
+    color: var(--on-night);
+  }
+
+  .page-hero__inner {
+    display: grid;
+    gap: clamp(2.5rem, 6vw, 4.5rem);
+    align-items: center;
+  }
+
+  @media (min-width: 60em) {
+    .page-hero__inner {
+      grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+    }
+  }
+
+  .page-hero h1 {
+    font-size: clamp(2.5rem, 6vw, 4.6rem);
+    margin-bottom: 1.5rem;
+  }
+
+  .accent {
+    color: #c9d8ff;
+  }
+
+  .page-hero__copy {
+    max-width: 38rem;
+    margin-bottom: 2rem;
+    font-size: clamp(1.05rem, 1.3vw, 1.175rem);
+    color: #d6dbe6;
+  }
+
+  .page-hero .eyebrow {
+    color: #d6dbe6;
+  }
+
+  .page-hero__photo {
+    position: relative;
+    margin: 0;
+    max-width: 420px;
+    width: 100%;
+    justify-self: center;
+  }
+
+  .page-hero__photo :global(img) {
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    object-position: 45% 25%;
+    border-radius: var(--radius-lg);
+    box-shadow: 0 30px 60px -30px rgb(0 0 0 / 0.7);
+  }
+
+  .page-hero__photo figcaption {
+    position: absolute;
+    left: 1rem;
+    right: 1rem;
+    bottom: 1rem;
+    display: grid;
+    gap: 0.1rem;
+    padding: 0.85rem 1rem;
+    border-radius: var(--radius);
+    background: rgb(11 19 34 / 0.72);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid var(--night-line);
+    font-size: 0.9rem;
+    line-height: 1.4;
+  }
+
+  .page-hero__photo figcaption strong {
+    color: #fff;
+    font-weight: 600;
+  }
+
+  .page-hero__photo figcaption span {
+    color: var(--on-night-2);
+  }
+
+  @media (max-width: 59.99em) {
+    .page-hero__photo {
+      max-width: 300px;
+      justify-self: start;
+    }
+  }
+
+  .hero-anim {
+    animation: hero-in 1s var(--ease-out) both;
+    animation-delay: calc(0.2s + var(--d, 0s));
+  }
+
+  @keyframes hero-in {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+  }
+
+  /* ---------- Section heads ---------- */
+  .section-head {
+    max-width: 50rem;
+    margin-bottom: clamp(2.5rem, 5vw, 4rem);
+  }
+
+  .section-head h2 {
+    margin-bottom: 1.25rem;
+  }
+
+  .service-nav ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 2rem 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .service-nav a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 2.75rem;
+    padding: 0.5rem 1rem;
+    border: 1.5px solid var(--line);
+    border-radius: 999px;
+    background: var(--card);
+    color: var(--ink);
+    font-size: 0.925rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: border-color 0.15s ease, background-color 0.15s ease;
+  }
+
+  .service-nav a:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .service-nav a span {
+    font-family: var(--font-display);
+    font-weight: 600;
+    color: var(--accent);
+  }
+
+  /* ---------- Services ---------- */
+  .service-list {
+    display: grid;
+    gap: clamp(1rem, 2vw, 1.5rem);
+  }
+
+  .service {
+    display: grid;
+    gap: 1.75rem 4rem;
+    padding: clamp(1.5rem, 4vw, 3rem);
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+  }
+
+  @media (min-width: 60em) {
+    .service {
+      grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.3fr);
+    }
+
+    .service__head {
+      align-self: start;
+    }
+  }
+
+  .service__number {
+    display: block;
+    margin-bottom: 1rem;
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 1rem;
+    color: var(--accent);
+  }
+
+  .service__title {
+    font-size: clamp(1.75rem, 3vw, 2.4rem);
+    margin-bottom: 0.75rem;
+  }
+
+  .service__tagline {
+    font-size: 1.15rem;
+    color: var(--ink-2);
+  }
+
+  .service__body {
+    max-width: 40rem;
+  }
+
+  .service__examples-title {
+    margin: 2rem 0 1rem;
+    font-family: var(--font-body);
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+  }
+
+  .service__examples {
+    margin-bottom: 2rem;
+  }
+
+  @media (min-width: 40em) {
+    .service__examples {
+      grid-template-columns: 1fr 1fr;
+      column-gap: 2rem;
+    }
+  }
+
+  .service__note {
+    display: flex;
+    gap: 0.75rem;
+    padding: 1rem 1.15rem;
+    margin-bottom: 2rem;
+    border-radius: var(--radius-sm);
+    font-size: 0.925rem;
+    line-height: 1.55;
+  }
+
+  .service__note :global(svg) {
+    flex: none;
+    margin-top: 0.15rem;
+  }
+
+  .service__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  .service__cta:hover {
+    text-decoration: underline;
+  }
+
+  /* Featured AI service */
+  .service--featured {
+    position: relative;
+    overflow: hidden;
+    background:
+      radial-gradient(40rem 26rem at 100% 0%, rgb(43 89 195 / 0.35), transparent 70%),
+      radial-gradient(30rem 20rem at 0% 100%, rgb(233 120 90 / 0.16), transparent 70%),
+      var(--night);
+    border-color: var(--night-2);
+    color: var(--on-night);
+  }
+
+  .service--featured .service__number,
+  .service--featured .service__cta {
+    color: var(--accent-on-night);
+  }
+
+  .service--featured .service__tagline,
+  .service--featured .service__body p {
+    color: #d6dbe6;
+  }
+
+  .service--featured .service__examples-title {
+    color: var(--on-night-2);
+  }
+
+  .service--featured .tick-list li::before {
+    border-color: var(--accent-on-night);
+  }
+
+  .service--featured .service__note {
+    background: rgb(255 255 255 / 0.06);
+    border: 1px solid var(--night-line);
+    color: var(--on-night-2);
+  }
+
+  .service--featured :focus-visible {
+    outline-color: var(--accent-on-night);
+  }
+
+  .service__badge {
+    display: inline-block;
+    margin-bottom: 1rem;
+    padding: 0.3rem 0.75rem;
+    border-radius: 999px;
+    background: rgb(141 176 255 / 0.15);
+    color: var(--accent-on-night);
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+  }
+
+  .service__tools {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin: 1.5rem 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .service__tools li {
+    padding: 0.3rem 0.75rem;
+    border: 1px solid var(--night-line);
+    border-radius: 999px;
+    font-size: 0.85rem;
+    color: var(--on-night);
+  }
+
+  .service__tools li:last-child {
+    border-style: dashed;
+    color: var(--on-night-2);
+  }
+
+  /* ---------- Principles ---------- */
+  .principles {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 1rem;
+  }
+
+  @media (min-width: 40em) {
+    .principles {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 60em) {
+    .principles {
+      grid-template-columns: repeat(6, 1fr);
+    }
+
+    .principle {
+      grid-column: span 2;
+    }
+
+    .principle:nth-child(4) {
+      grid-column: 2 / span 2;
+    }
+  }
+
+  @media (min-width: 40em) and (max-width: 59.99em) {
+    .principle:last-child {
+      grid-column: 1 / -1;
+    }
+  }
+
+  .principle {
+    padding: clamp(1.5rem, 3vw, 2rem);
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+  }
+
+  .principle__n {
+    display: block;
+    margin-bottom: 1.25rem;
+    font-family: var(--font-display);
+    font-weight: 600;
+    color: var(--accent);
+  }
+
+  .principle h3 {
+    font-size: 1.3rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .principle p {
+    color: var(--ink-2);
+    font-size: 0.98rem;
+  }
+
+  /* ---------- Enquiry ---------- */
+  .enquire__grid {
+    display: grid;
+    gap: clamp(2.5rem, 5vw, 4rem);
+  }
+
+  @media (min-width: 64em) {
+    .enquire__grid {
+      grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+      align-items: start;
+    }
+
+    .enquire__intro {
+      position: sticky;
+      top: 6.5rem;
+    }
+  }
+
+  .enquire__intro h2 {
+    margin-bottom: 1.25rem;
+  }
+
+  .steps {
+    list-style: none;
+    margin: 2.5rem 0 0;
+    padding: 0;
+    display: grid;
+    gap: 1.5rem;
+  }
+
+  .steps li {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 1rem;
+  }
+
+  .steps__n {
+    display: grid;
+    place-items: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: 50%;
+    background: var(--night);
+    color: var(--on-night);
+    font-family: var(--font-display);
+    font-weight: 600;
+  }
+
+  .steps h3 {
+    font-size: 1.15rem;
+    margin: 0.35rem 0 0.35rem;
+  }
+
+  .steps p {
+    color: var(--ink-2);
+    font-size: 0.98rem;
+  }
+</style>

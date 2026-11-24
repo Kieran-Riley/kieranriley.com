@@ -1,0 +1,699 @@
+---
+import { PUBLIC_TURNSTILE_SITE_KEY } from 'astro:env/client';
+import Icon from './Icon.astro';
+import {
+  aiHelpAreas,
+  aiTools,
+  budgets,
+  enquiryTypes,
+  limits,
+  projectStages,
+  successMessage,
+  supportKinds,
+  timelines,
+} from '../data/enquiry';
+import { HONEYPOT_FIELD } from '../lib/enquiry/handler';
+---
+
+<div class="enquiry" data-enquiry>
+  <form
+    class="form"
+    action="/api/enquiry"
+    method="post"
+    novalidate
+    data-enquiry-form
+    aria-describedby="form-required-note"
+  >
+    <p id="form-required-note" class="form__note">Fields marked <span aria-hidden="true">*</span><span class="visually-hidden">with an asterisk</span> are required.</p>
+
+    <div class="form__alert" data-form-alert role="alert" tabindex="-1" hidden></div>
+
+    <div class="form__row">
+      <div class="field">
+        <label for="f-name">Your name <span class="req" aria-hidden="true">*</span></label>
+        <input id="f-name" name="name" type="text" autocomplete="name" required maxlength={limits.name} aria-describedby="f-name-error" />
+        <p class="field__error" id="f-name-error" data-error-for="name"></p>
+      </div>
+      <div class="field">
+        <label for="f-email">Email address <span class="req" aria-hidden="true">*</span></label>
+        <input id="f-email" name="email" type="email" autocomplete="email" inputmode="email" required maxlength={limits.email} aria-describedby="f-email-error" />
+        <p class="field__error" id="f-email-error" data-error-for="email"></p>
+      </div>
+    </div>
+
+    <fieldset class="field field--choices">
+      <legend>What can I help with? <span class="req" aria-hidden="true">*</span></legend>
+      <div class="choices" role="presentation">
+        {
+          enquiryTypes.map((t) => (
+            <label class="choice">
+              <input type="radio" name="type" value={t.value} required aria-describedby="f-type-error" />
+              <span>{t.label}</span>
+            </label>
+          ))
+        }
+      </div>
+      <p class="field__error" id="f-type-error" data-error-for="type"></p>
+    </fieldset>
+
+    <!-- Follow-up questions. Shown only for the matching enquiry type when JavaScript is available. -->
+    <div class="followup" data-when="new-build">
+      <div class="field">
+        <label for="f-stage">Where are you up to? <span class="opt">Optional</span></label>
+        <select id="f-stage" name="projectStage" aria-describedby="f-stage-error">
+          <option value="">Choose one…</option>
+          {projectStages.map((o) => <option value={o.value}>{o.label}</option>)}
+        </select>
+        <p class="field__error" id="f-stage-error" data-error-for="projectStage"></p>
+      </div>
+    </div>
+
+    <div class="followup" data-when="ai-project">
+      <fieldset class="field field--choices">
+        <legend>Which tools have you used? <span class="opt">Optional</span></legend>
+        <div class="chips">
+          {
+            aiTools.map((o) => (
+              <label class="chip">
+                <input type="checkbox" name="aiTools" value={o.value} />
+                <span>{o.label}</span>
+              </label>
+            ))
+          }
+        </div>
+        <p class="field__error" data-error-for="aiTools"></p>
+      </fieldset>
+      <fieldset class="field field--choices">
+        <legend>What would you like help with? <span class="opt">Optional</span></legend>
+        <div class="chips">
+          {
+            aiHelpAreas.map((o) => (
+              <label class="chip">
+                <input type="checkbox" name="aiHelp" value={o.value} />
+                <span>{o.label}</span>
+              </label>
+            ))
+          }
+        </div>
+        <p class="field__error" data-error-for="aiHelp"></p>
+      </fieldset>
+    </div>
+
+    <div class="followup" data-when="modernise">
+      <div class="field">
+        <label for="f-stack">What is the current system built with? <span class="opt">Optional</span></label>
+        <input id="f-stack" name="currentStack" type="text" maxlength={limits.currentStack} aria-describedby="f-stack-hint f-stack-error" />
+        <p class="field__hint" id="f-stack-hint">For example “PHP and MySQL”, “an old Access database” or “not sure”.</p>
+        <p class="field__error" id="f-stack-error" data-error-for="currentStack"></p>
+      </div>
+    </div>
+
+    <div class="followup" data-when="advice-support">
+      <div class="field">
+        <label for="f-support">What kind of support are you looking for? <span class="opt">Optional</span></label>
+        <select id="f-support" name="supportKind" aria-describedby="f-support-error">
+          <option value="">Choose one…</option>
+          {supportKinds.map((o) => <option value={o.value}>{o.label}</option>)}
+        </select>
+        <p class="field__error" id="f-support-error" data-error-for="supportKind"></p>
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="f-description">About your project <span class="req" aria-hidden="true">*</span></label>
+      <textarea
+        id="f-description"
+        name="description"
+        rows="6"
+        required
+        minlength={limits.descriptionMin}
+        maxlength={limits.description}
+        aria-describedby="f-description-hint f-description-error"></textarea>
+      <p class="field__hint" id="f-description-hint">
+        What are you trying to achieve, and where are you up to? Don’t worry about technical detail — plain English is
+        perfect.
+      </p>
+      <p class="field__error" id="f-description-error" data-error-for="description"></p>
+    </div>
+
+    <details class="extras">
+      <summary>Add more detail <span class="opt">Optional</span></summary>
+      <div class="extras__body">
+        <div class="form__row">
+          <div class="field">
+            <label for="f-company">Company or business name</label>
+            <input id="f-company" name="company" type="text" autocomplete="organization" maxlength={limits.company} aria-describedby="f-company-error" />
+            <p class="field__error" id="f-company-error" data-error-for="company"></p>
+          </div>
+          <div class="field">
+            <label for="f-url">Website, GitHub repo or project link</label>
+            <input id="f-url" name="url" type="text" inputmode="url" autocomplete="url" maxlength={limits.url} placeholder="https://" aria-describedby="f-url-error" />
+            <p class="field__error" id="f-url-error" data-error-for="url"></p>
+          </div>
+        </div>
+        <div class="form__row">
+          <div class="field">
+            <label for="f-budget">Approximate budget</label>
+            <select id="f-budget" name="budget" aria-describedby="f-budget-error">
+              <option value="">Choose one…</option>
+              {budgets.map((o) => <option value={o.value}>{o.label}</option>)}
+            </select>
+            <p class="field__error" id="f-budget-error" data-error-for="budget"></p>
+          </div>
+          <div class="field">
+            <label for="f-timeline">Timeline</label>
+            <select id="f-timeline" name="timeline" aria-describedby="f-timeline-error">
+              <option value="">Choose one…</option>
+              {timelines.map((o) => <option value={o.value}>{o.label}</option>)}
+            </select>
+            <p class="field__error" id="f-timeline-error" data-error-for="timeline"></p>
+          </div>
+        </div>
+      </div>
+    </details>
+
+    <!-- Spam traps: hidden from people, but bots tend to fill them in. -->
+    <div class="hp" aria-hidden="true">
+      <label for="f-hp">Leave this field empty</label>
+      <input id="f-hp" name={HONEYPOT_FIELD} type="text" tabindex="-1" autocomplete="off" />
+    </div>
+    <input type="hidden" name="startedAt" value="" data-started-at />
+
+    {PUBLIC_TURNSTILE_SITE_KEY && <div class="cf-turnstile" data-sitekey={PUBLIC_TURNSTILE_SITE_KEY} data-theme="light" />}
+
+    <div class="form__footer">
+      <button class="btn form__submit" type="submit" data-submit>
+        <span data-submit-label>Send enquiry</span>
+        <Icon name="arrow-right" />
+      </button>
+      <p class="form__privacy">
+        I’ll only use your details to reply to your enquiry. See the <a href="/privacy">privacy notice</a>.
+      </p>
+    </div>
+  </form>
+
+  <div class="success" data-success role="status" tabindex="-1" hidden>
+    <Icon name="circle-check" size={40} strokeWidth={1.75} />
+    <h3>Enquiry sent</h3>
+    <p>{successMessage}</p>
+    <p class="muted">A confirmation is on its way to your inbox. If you don’t see it, check your spam folder.</p>
+  </div>
+</div>
+
+{PUBLIC_TURNSTILE_SITE_KEY && <script is:inline src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>}
+
+<script>
+  const root = document.querySelector<HTMLElement>('[data-enquiry]');
+  const form = root?.querySelector<HTMLFormElement>('[data-enquiry-form]');
+
+  if (root && form) {
+    const alertBox = form.querySelector<HTMLElement>('[data-form-alert]')!;
+    const submit = form.querySelector<HTMLButtonElement>('[data-submit]')!;
+    const submitLabel = form.querySelector<HTMLElement>('[data-submit-label]')!;
+    const success = root.querySelector<HTMLElement>('[data-success]')!;
+    const followups = form.querySelectorAll<HTMLElement>('[data-when]');
+    const startedAt = form.querySelector<HTMLInputElement>('[data-started-at]')!;
+    startedAt.value = String(Date.now());
+
+    // Show only the follow-up questions for the chosen enquiry type.
+    const syncFollowups = () => {
+      const type = (form.elements.namedItem('type') as RadioNodeList).value;
+      followups.forEach((el) => {
+        const active = el.dataset.when === type;
+        el.classList.toggle('is-active', active);
+        el.querySelectorAll<HTMLInputElement | HTMLSelectElement>('input, select, textarea').forEach((input) => {
+          input.disabled = !active;
+        });
+      });
+    };
+    form.addEventListener('change', (e) => {
+      if ((e.target as HTMLInputElement).name === 'type') syncFollowups();
+    });
+    syncFollowups();
+
+    const fieldFor = (name: string) =>
+      form.querySelector<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>(`[name="${name}"]`);
+
+    const setError = (name: string, message: string) => {
+      const slot = form.querySelector<HTMLElement>(`[data-error-for="${name}"]`);
+      if (slot) slot.textContent = message;
+      form.querySelectorAll<HTMLElement>(`[name="${name}"]`).forEach((el) => {
+        if (message) el.setAttribute('aria-invalid', 'true');
+        else el.removeAttribute('aria-invalid');
+      });
+    };
+
+    const clearErrors = () => {
+      form.querySelectorAll<HTMLElement>('[data-error-for]').forEach((el) => (el.textContent = ''));
+      form.querySelectorAll('[aria-invalid]').forEach((el) => el.removeAttribute('aria-invalid'));
+      alertBox.hidden = true;
+      alertBox.textContent = '';
+    };
+
+    const showAlert = (message: string) => {
+      alertBox.textContent = message;
+      alertBox.hidden = false;
+      alertBox.focus();
+    };
+
+    // Quick checks in the browser so people get instant feedback.
+    // The server repeats all of these and has the final say.
+    const clientValidate = (): Record<string, string> => {
+      const errors: Record<string, string> = {};
+      const val = (n: string) => (fieldFor(n)?.value ?? '').trim();
+      if (!val('name')) errors.name = 'Please tell me your name.';
+      const email = val('email');
+      if (!email) errors.email = 'Please enter your email address so I can reply.';
+      else if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) errors.email = 'That email address doesn’t look quite right.';
+      if (!(form.elements.namedItem('type') as RadioNodeList).value)
+        errors.type = 'Please choose the option that best fits your enquiry.';
+      const description = val('description');
+      if (!description) errors.description = 'Please tell me a little about your project.';
+      else if (description.length < 20) errors.description = 'Could you add a bit more detail? A couple of sentences is plenty.';
+      return errors;
+    };
+
+    const applyErrors = (errors: Record<string, string>) => {
+      const names = Object.keys(errors);
+      names.forEach((n) => setError(n, errors[n]));
+      // Open the optional section if an error is inside it.
+      const extras = form.querySelector<HTMLDetailsElement>('details.extras');
+      if (extras && names.some((n) => extras.querySelector(`[name="${n}"]`))) extras.open = true;
+      showAlert(
+        names.length === 1
+          ? 'There’s one thing to fix before sending — please check the highlighted field.'
+          : `There are ${names.length} things to fix before sending — please check the highlighted fields.`,
+      );
+    };
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      clearErrors();
+
+      const errors = clientValidate();
+      if (Object.keys(errors).length) {
+        applyErrors(errors);
+        return;
+      }
+
+      submit.disabled = true;
+      submit.setAttribute('aria-busy', 'true');
+      submitLabel.textContent = 'Sending…';
+
+      try {
+        const res = await fetch(form.action, {
+          method: 'POST',
+          body: new FormData(form),
+          headers: { Accept: 'application/json' },
+        });
+        const data = (await res.json().catch(() => null)) as
+          | { ok: boolean; message: string; errors?: Record<string, string> }
+          | null;
+
+        if (res.ok && data?.ok) {
+          form.hidden = true;
+          success.hidden = false;
+          success.focus();
+          success.scrollIntoView({ block: 'center', behavior: 'smooth' });
+          return;
+        }
+
+        if (data?.errors && Object.keys(data.errors).length) applyErrors(data.errors);
+        else showAlert(data?.message ?? 'Sorry, something went wrong. Please try again in a moment.');
+        // Turnstile tokens are single use; get a fresh one for the next attempt.
+        (window as unknown as { turnstile?: { reset: () => void } }).turnstile?.reset();
+      } catch {
+        showAlert('Sorry, your enquiry couldn’t be sent — please check your connection and try again.');
+      } finally {
+        submit.disabled = false;
+        submit.removeAttribute('aria-busy');
+        submitLabel.textContent = 'Send enquiry';
+      }
+    });
+
+    // Clear a field's error as soon as it's edited.
+    form.addEventListener('input', (e) => {
+      const name = (e.target as HTMLInputElement).name;
+      if (name) setError(name, '');
+    });
+  }
+</script>
+
+<style>
+  .enquiry {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    padding: clamp(1.25rem, 4vw, 2.5rem);
+    box-shadow: var(--shadow);
+  }
+
+  .form {
+    display: grid;
+    gap: 1.5rem;
+  }
+
+  .form__note {
+    margin: 0;
+    font-size: 0.875rem;
+    color: var(--ink-3);
+  }
+
+  .form__row {
+    display: grid;
+    gap: 1.5rem;
+  }
+
+  @media (min-width: 40em) {
+    .form__row {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  .field {
+    display: grid;
+    gap: 0.45rem;
+    min-width: 0;
+  }
+
+  fieldset {
+    border: 0;
+    margin: 0;
+    padding: 0;
+  }
+
+  label,
+  legend {
+    font-weight: 600;
+    font-size: 0.975rem;
+  }
+
+  legend {
+    padding: 0;
+    margin-bottom: 0.7rem;
+  }
+
+  .req {
+    color: var(--danger);
+  }
+
+  .opt {
+    margin-left: 0.35rem;
+    font-weight: 400;
+    font-size: 0.85rem;
+    color: var(--ink-3);
+  }
+
+  input[type='text'],
+  input[type='email'],
+  select,
+  textarea {
+    width: 100%;
+    min-height: 3rem;
+    padding: 0.7rem 0.9rem;
+    border: 1.5px solid var(--line);
+    border-radius: var(--radius-sm);
+    background: #fff;
+    color: var(--ink);
+    font: inherit;
+    font-size: 1rem;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  textarea {
+    resize: vertical;
+    min-height: 9rem;
+  }
+
+  select {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23474d59' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.9rem center;
+    padding-right: 2.5rem;
+  }
+
+  input:hover,
+  select:hover,
+  textarea:hover {
+    border-color: #c4bcae;
+  }
+
+  input:focus-visible,
+  select:focus-visible,
+  textarea:focus-visible {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgb(43 89 195 / 0.22);
+  }
+
+  [aria-invalid='true'] {
+    border-color: var(--danger) !important;
+  }
+
+  .field__hint {
+    margin: 0;
+    font-size: 0.875rem;
+    color: var(--ink-3);
+  }
+
+  .field__error {
+    margin: 0;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--danger);
+  }
+
+  .field__error:empty {
+    display: none;
+  }
+
+  /* Enquiry type radio cards */
+  .choices {
+    display: grid;
+    gap: 0.6rem;
+  }
+
+  @media (min-width: 40em) {
+    .choices {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  .choice {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    min-height: 3.25rem;
+    padding: 0.75rem 1rem;
+    border: 1.5px solid var(--line);
+    border-radius: var(--radius-sm);
+    background: #fff;
+    font-weight: 500;
+    font-size: 0.95rem;
+    line-height: 1.35;
+    cursor: pointer;
+    transition: border-color 0.15s ease, background-color 0.15s ease;
+  }
+
+  .choice:hover {
+    border-color: #c4bcae;
+  }
+
+  .choice input {
+    flex: none;
+    width: 1.1rem;
+    height: 1.1rem;
+    margin: 0;
+    accent-color: var(--accent);
+  }
+
+  .choice:has(input:checked) {
+    border-color: var(--accent);
+    background: var(--accent-soft);
+  }
+
+  .choice:has(input:focus-visible) {
+    box-shadow: 0 0 0 3px rgb(43 89 195 / 0.3);
+  }
+
+  .choice:has([aria-invalid='true']) {
+    border-color: var(--danger);
+  }
+
+  /* Checkbox chips */
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .chip {
+    position: relative;
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 0.925rem;
+  }
+
+  .chip input {
+    position: absolute;
+    opacity: 0;
+    inset: 0;
+    margin: 0;
+    cursor: pointer;
+  }
+
+  .chip span {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.5rem;
+    padding: 0.45rem 0.95rem;
+    border: 1.5px solid var(--line);
+    border-radius: 999px;
+    background: #fff;
+    transition: all 0.15s ease;
+  }
+
+  .chip:hover span {
+    border-color: #c4bcae;
+  }
+
+  .chip input:checked + span {
+    border-color: var(--accent);
+    background: var(--accent);
+    color: #fff;
+  }
+
+  .chip input:focus-visible + span {
+    box-shadow: 0 0 0 3px rgb(43 89 195 / 0.3);
+  }
+
+  /* Follow-up questions */
+  .followup {
+    display: grid;
+    gap: 1.5rem;
+    padding: 1.25rem;
+    border-radius: var(--radius);
+    background: var(--paper);
+    border: 1px dashed var(--line);
+  }
+
+  :global(.js) .followup:not(.is-active) {
+    display: none;
+  }
+
+  /* Optional extras */
+  .extras {
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .extras summary {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 1rem 0;
+    font-weight: 600;
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .extras summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .extras summary::before {
+    content: '+';
+    display: inline-grid;
+    place-items: center;
+    width: 1.5rem;
+    height: 1.5rem;
+    margin-right: 0.5rem;
+    border-radius: 50%;
+    background: var(--accent-soft);
+    color: var(--accent);
+    font-weight: 700;
+    line-height: 1;
+  }
+
+  .extras[open] summary::before {
+    content: '−';
+  }
+
+  .extras__body {
+    display: grid;
+    gap: 1.5rem;
+    padding-bottom: 1.5rem;
+  }
+
+  .hp {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+
+  .form__alert {
+    padding: 0.9rem 1rem;
+    border-radius: var(--radius-sm);
+    background: var(--danger-soft);
+    color: var(--danger);
+    font-weight: 500;
+    border-left: 4px solid var(--danger);
+  }
+
+  .form__alert:focus {
+    outline: none;
+  }
+
+  .form__footer {
+    display: grid;
+    gap: 1rem;
+    align-items: center;
+  }
+
+  @media (min-width: 40em) {
+    .form__footer {
+      grid-template-columns: auto 1fr;
+      gap: 1.5rem;
+    }
+  }
+
+  .form__submit[disabled] {
+    opacity: 0.7;
+    cursor: progress;
+  }
+
+  .form__privacy {
+    margin: 0;
+    font-size: 0.875rem;
+    color: var(--ink-3);
+  }
+
+  .success {
+    padding: clamp(1rem, 4vw, 2rem) 0;
+    text-align: center;
+    color: var(--ink);
+  }
+
+  .success:focus {
+    outline: none;
+  }
+
+  .success :global(svg) {
+    margin: 0 auto 1rem;
+    color: var(--success);
+  }
+
+  .success h3 {
+    font-size: 1.75rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .success p {
+    max-width: 30rem;
+    margin-inline: auto;
+  }
+</style>

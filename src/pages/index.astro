@@ -1,0 +1,780 @@
+---
+import { Picture, getImage } from 'astro:assets';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Icon from '../components/Icon.astro';
+import { site } from '../data/site';
+import heroImage from '../assets/images/hero.jpg';
+import portrait from '../assets/images/kr.jpg';
+import portraitSquare from '../assets/images/kr-square.png';
+
+const title = 'Kieran Riley — Freelance Full-Stack Software Developer, Newcastle UK';
+const description =
+  'I’m Kieran, a full-stack software developer in Newcastle with around six years’ experience in startups and scale-ups. I help people build, improve and launch software — including apps started with AI tools.';
+
+const personImage = await getImage({ src: portraitSquare, width: 800, height: 800, format: 'jpg' });
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'ProfilePage',
+  url: new URL('/', Astro.site).toString(),
+  name: title,
+  mainEntity: {
+    '@type': 'Person',
+    '@id': new URL('/#person', Astro.site).toString(),
+    name: site.name,
+    jobTitle: site.role,
+    url: new URL('/', Astro.site).toString(),
+    image: new URL(personImage.src, Astro.site).toString(),
+    address: { '@type': 'PostalAddress', addressLocality: site.locality, addressCountry: site.country },
+    knowsAbout: [
+      'Full-stack software development',
+      'React',
+      'React Native',
+      'Python',
+      'Django',
+      'AI-assisted software development',
+      'Legacy software modernisation',
+    ],
+    sameAs: [...site.social.map((s) => s.href)],
+  },
+};
+
+const websiteLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: site.name,
+  url: new URL('/', Astro.site).toString(),
+  inLanguage: 'en-GB',
+};
+
+const highlights = [
+  {
+    title: 'Startups and scale-ups',
+    body: 'Most of my career has been spent in small, fast-moving teams, building products for real customers.',
+  },
+  {
+    title: 'Web and mobile',
+    body: 'Full-stack work across front end, back end and mobile — most often with React, React Native, Python and Django.',
+  },
+  {
+    title: 'New and established',
+    body: 'From brand-new builds to modernising older platforms that businesses still rely on every day.',
+  },
+  {
+    title: 'Product-minded',
+    body: 'Helping shape what gets built and how — not just working through a list of predefined requirements.',
+  },
+];
+
+const contributions = [
+  {
+    title: 'AI-powered features',
+    body: 'Designing and building product features that put AI to practical, genuinely useful work.',
+  },
+  {
+    title: 'Validation systems',
+    body: 'Building checks that help make sure information is accurate and complete before it causes problems.',
+  },
+  {
+    title: 'Improving existing platforms',
+    body: 'Finding ways to make established products simpler, faster and easier to maintain.',
+  },
+];
+
+const aiFoundations = [
+  { title: 'Architecture', body: 'Structuring an application so it can grow without becoming fragile.' },
+  { title: 'Security', body: 'Spotting the risks that are easy to miss when code is generated quickly.' },
+  { title: 'Reliability', body: 'Making sure things keep working when real people start using them.' },
+  { title: 'Maintainability', body: 'Keeping the codebase understandable so you can keep building on it.' },
+];
+---
+
+<BaseLayout title={title} description={description} jsonLd={[jsonLd, websiteLd]}>
+  <!-- Hero -->
+  <section class="hero on-night" aria-labelledby="hero-title">
+    <div class="hero__media" aria-hidden="true">
+      <Picture
+        src={heroImage}
+        alt=""
+        widths={[480, 768, 1080, 1440, 1920, 2560]}
+        sizes="100vw"
+        formats={['webp']}
+        quality={70}
+        loading="eager"
+        fetchpriority="high"
+        class="hero__img"
+      />
+      <div class="hero__scrim"></div>
+    </div>
+
+    <div class="container hero__inner">
+      <div class="hero__content">
+        <p class="eyebrow hero__anim" style="--d: 0.1s">{site.role} · {site.location}</p>
+        <h1 id="hero-title" class="h-display hero__anim" style="--d: 0.2s">
+          Software developer. Product thinker. <span class="hero__accent">Here to help you build what’s next.</span>
+        </h1>
+        <div class="hero__copy hero__anim" style="--d: 0.35s">
+          <p>
+            I’m a full-stack software developer with experience building real-world products, working with startups
+            and scale-ups, and helping people get more out of modern development tools.
+          </p>
+          <p>
+            Whether you’re exploring an idea, building something with AI or looking to improve existing software, I can
+            help you figure out the next step.
+          </p>
+        </div>
+        <div class="btn-row hero__anim" style="--d: 0.5s">
+          <a class="btn btn--light" href="/work-with-me">Work with me <Icon name="arrow-right" /></a>
+          <a class="btn btn--ghost-light" href="#about">More about me <Icon name="arrow-down" /></a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Background -->
+  <section id="about" class="section" aria-labelledby="about-title">
+    <div class="container about">
+      <figure class="about__photo" data-reveal>
+        <Picture
+          src={portrait}
+          alt="Kieran Riley sitting at a laptop, listening thoughtfully during a discussion"
+          widths={[400, 640, 900, 1200]}
+          sizes="(min-width: 60em) 440px, (min-width: 40em) 60vw, 100vw"
+          formats={['webp']}
+          quality={72}
+        />
+        <figcaption><strong>Kieran Riley</strong> · {site.location}</figcaption>
+      </figure>
+
+      <div class="about__body">
+        <p class="eyebrow" data-reveal>About me</p>
+        <h2 id="about-title" class="h-section" data-reveal>
+          I’ve spent my career building real products with small, ambitious teams.
+        </h2>
+        <div class="about__copy" data-reveal>
+          <p class="lede">
+            For around six years I’ve worked as a full-stack software developer, mostly in startups and scale-ups —
+            where teams are small, priorities move quickly and the software has to work for real customers.
+          </p>
+          <p>
+            That’s meant building new products, improving and maintaining existing ones, and modernising older systems
+            so they can keep up with the business around them. Day to day I work across the whole stack, most often
+            with React, React Native, Python, Django and modern web technologies.
+          </p>
+          <p>
+            I’ve also learned that the best results come when developers help shape what gets built, rather than just
+            receiving a list of requirements. I like to understand the business behind the software: what matters to
+            your customers, what’s worth building now and which trade-offs are worth making.
+          </p>
+        </div>
+
+        <ul class="highlights" role="list">
+          {
+            highlights.map((h, i) => (
+              <li class="highlight" data-reveal style={`--reveal-delay: ${i * 0.06}s`}>
+                <h3>{h.title}</h3>
+                <p>{h.body}</p>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Product thinking -->
+  <section class="section section--alt" aria-labelledby="product-title">
+    <div class="container split">
+      <div class="split__main">
+        <p class="eyebrow" data-reveal>Product thinking</p>
+        <h2 id="product-title" class="h-section" data-reveal>More than just writing code</h2>
+        <div class="prose" data-reveal>
+          <p class="lede">Building successful software takes more than choosing the right technology.</p>
+          <p>
+            Having worked in startups and growing businesses throughout my career, I’ve learned how important it is to
+            understand the problem before jumping into a solution.
+          </p>
+          <p>
+            I enjoy exploring ideas, challenging assumptions and helping people make practical decisions about what to
+            build, how to build it and what comes next.
+          </p>
+          <p>
+            Sometimes that means developing a new application. Other times, it means improving something you already
+            have or finding a simpler way to achieve the same result.
+          </p>
+        </div>
+      </div>
+
+      <aside class="split__aside" aria-labelledby="contrib-title" data-reveal>
+        <h3 id="contrib-title" class="aside-title">Along the way, I’ve contributed ideas as well as code — including</h3>
+        <ol class="numbered" role="list">
+          {
+            contributions.map((c, i) => (
+              <li>
+                <span class="numbered__n" aria-hidden="true">
+                  {String(i + 1).padStart(2, '0')}
+                </span>
+                <div>
+                  <h4>{c.title}</h4>
+                  <p>{c.body}</p>
+                </div>
+              </li>
+            ))
+          }
+        </ol>
+      </aside>
+    </div>
+  </section>
+
+  <!-- AI -->
+  <section class="section" aria-labelledby="ai-title">
+    <div class="container">
+      <div class="ai-intro">
+        <p class="eyebrow" data-reveal>AI-assisted development</p>
+        <h2 id="ai-title" class="h-section" data-reveal>Building with AI, backed by real engineering experience</h2>
+      </div>
+
+      <div class="ai-grid">
+        <div class="prose" data-reveal>
+          <p class="lede">
+            AI has changed how software gets built. I use coding agents and AI-assisted tools as a practical part of
+            my own work — and I’ve spent a lot of time helping other people learn to use them well.
+          </p>
+          <p>
+            I understand both sides: the conventional engineering practices that keep software dependable, and the
+            new AI-assisted workflows that let people move faster than ever.
+          </p>
+          <p>
+            AI makes it possible for far more people to build things independently, which I think is brilliant. But a
+            working prototype isn’t the same as software people can depend on. That’s where an experienced developer
+            can help — so you keep the speed and independence, and build on solid foundations.
+          </p>
+
+          <a class="agents-card" href={site.agentsNe.href} target="_blank" rel="noopener">
+            <span class="agents-card__label">Co-founder</span>
+            <span class="agents-card__name">
+              {site.agentsNe.label}
+              <Icon name="arrow-up-right" size={20} />
+            </span>
+            <span class="agents-card__body">
+              An initiative helping individuals and businesses explore and adopt AI.
+            </span>
+            <span class="visually-hidden">(opens in a new tab)</span>
+          </a>
+        </div>
+
+        <div class="foundations" data-reveal>
+          <h3 class="aside-title">Where experience makes the difference</h3>
+          <dl>
+            {
+              aiFoundations.map((f) => (
+                <div class="foundations__item">
+                  <dt>{f.title}</dt>
+                  <dd>{f.body}</dd>
+                </div>
+              ))
+            }
+          </dl>
+          <a class="text-link" href="/work-with-me#ai">
+            Built something with AI? See how I can help <Icon name="arrow-right" size={18} />
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Approach -->
+  <section class="section section--night approach" aria-labelledby="approach-title">
+    <div class="container approach__inner">
+      <p class="eyebrow" data-reveal>My approach</p>
+      <h2 id="approach-title" class="h-section" data-reveal>
+        A developer in your corner, not an agency on your payroll.
+      </h2>
+      <div class="approach__copy" data-reveal>
+        <p class="lede">
+          I’m not a large development agency. When you work with me, you’re working directly with the person helping
+          build your software.
+        </p>
+        <p>
+          I take on a limited number of independent projects because I genuinely enjoy helping people solve problems
+          and bring ideas to life.
+        </p>
+        <p>
+          I believe in straightforward communication, honest advice and finding solutions that make sense for your
+          goals and budget.
+        </p>
+        <p>
+          Whether you need an entire application built or just a second opinion, I’m happy to explore how I can help.
+        </p>
+      </div>
+      <div class="approach__sign" data-reveal>
+        <Picture
+          src={portraitSquare}
+          alt=""
+          widths={[96, 192]}
+          sizes="64px"
+          formats={['webp']}
+          class="approach__avatar"
+        />
+        <div>
+          <strong>Kieran Riley</strong>
+          <span>{site.role}</span>
+        </div>
+      </div>
+      <div class="btn-row" data-reveal>
+        <a class="btn btn--light" href="/work-with-me">Work with me <Icon name="arrow-right" /></a>
+        <a class="btn btn--ghost-light" href="/work-with-me#enquire">Tell me about your project</a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  /* ---------- Hero ---------- */
+  .hero {
+    position: relative;
+    isolation: isolate;
+    display: flex;
+    flex-direction: column;
+    min-height: 100svh;
+    background:
+      radial-gradient(60rem 40rem at 85% 10%, rgb(43 89 195 / 0.16), transparent 70%),
+      var(--night);
+    color: var(--on-night);
+    overflow: hidden;
+  }
+
+  .hero__media {
+    position: relative;
+    height: min(66svh, 38rem);
+    animation: hero-bg 1.6s var(--ease-out) both;
+  }
+
+  .hero__media :global(picture),
+  .hero__media :global(img) {
+    width: 100%;
+    height: 100%;
+  }
+
+  .hero__media :global(img) {
+    object-fit: cover;
+    object-position: 35% 52%;
+  }
+
+  .hero__scrim {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    background:
+      linear-gradient(180deg, rgb(11 19 34 / 0.65) 0%, rgb(11 19 34 / 0) 18%),
+      linear-gradient(0deg, var(--night) 0%, var(--night) 8%, rgb(11 19 34 / 0.8) 24%, rgb(11 19 34 / 0) 55%);
+  }
+
+  .hero__inner {
+    position: relative;
+    z-index: 2;
+    margin-top: -4.5rem;
+    padding-bottom: clamp(3.5rem, 8vh, 5rem);
+  }
+
+  .hero__content {
+    max-width: 40rem;
+  }
+
+  .hero h1 {
+    font-size: clamp(2.35rem, 9vw, 3rem);
+    margin-bottom: 1.5rem;
+  }
+
+  .hero__accent {
+    color: #c9d8ff;
+  }
+
+  .hero__copy {
+    max-width: 36rem;
+    margin-bottom: 2rem;
+    font-size: clamp(1.05rem, 1.3vw, 1.175rem);
+    color: #d6dbe6;
+  }
+
+  .hero .eyebrow {
+    color: #d6dbe6;
+  }
+
+  @media (min-width: 48em) {
+    .hero h1 {
+      font-size: clamp(3rem, 6.5vw, 4rem);
+    }
+  }
+
+  @media (min-width: 60em) {
+    .hero {
+      flex-direction: row;
+      align-items: center;
+    }
+
+    .hero__media {
+      position: absolute;
+      inset: 0 auto 0 0;
+      width: 58%;
+      height: auto;
+    }
+
+    .hero__media :global(img) {
+      object-position: 30% 60%;
+    }
+
+    .hero__scrim {
+      background:
+        linear-gradient(180deg, rgb(11 19 34 / 0.7) 0%, rgb(11 19 34 / 0) 16%),
+        linear-gradient(0deg, rgb(11 19 34 / 0.6) 0%, rgb(11 19 34 / 0) 25%),
+        linear-gradient(90deg, rgb(11 19 34 / 0) 40%, rgb(11 19 34 / 0.55) 75%);
+    }
+
+    .hero__media {
+      -webkit-mask-image: linear-gradient(90deg, #000 45%, transparent 96%);
+      mask-image: linear-gradient(90deg, #000 45%, transparent 96%);
+    }
+
+    .hero__inner {
+      margin-top: 0;
+      padding-block: 7rem 4rem;
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .hero__content {
+      width: 56%;
+      max-width: 38rem;
+    }
+
+    .hero h1 {
+      font-size: clamp(3rem, 4.6vw, 4.6rem);
+    }
+  }
+
+  .hero__anim {
+    animation: hero-in 1.1s var(--ease-out) both;
+    animation-delay: calc(0.35s + var(--d, 0s));
+  }
+
+  @keyframes hero-in {
+    from {
+      opacity: 0;
+      transform: translateY(24px);
+    }
+  }
+
+  @keyframes hero-bg {
+    from {
+      opacity: 0;
+      transform: scale(1.04);
+    }
+  }
+
+  /* ---------- About ---------- */
+  .about {
+    display: grid;
+    gap: clamp(2.5rem, 6vw, 5rem);
+    align-items: start;
+  }
+
+  @media (min-width: 60em) {
+    .about {
+      grid-template-columns: minmax(0, 440px) minmax(0, 1fr);
+    }
+
+    .about__photo {
+      position: sticky;
+      top: 6.5rem;
+    }
+  }
+
+  .about__photo {
+    margin: 0;
+  }
+
+  .about__photo :global(img) {
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    object-position: 45% 30%;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow);
+  }
+
+  .about__photo figcaption {
+    margin-top: 0.9rem;
+    font-size: 0.9rem;
+    color: var(--ink-3);
+  }
+
+  .about__photo figcaption strong {
+    color: var(--ink);
+    font-weight: 600;
+  }
+
+  .about__body h2 {
+    margin-bottom: 1.75rem;
+  }
+
+  .about__copy {
+    max-width: 40rem;
+  }
+
+  .highlights {
+    list-style: none;
+    margin: 3rem 0 0;
+    padding: 0;
+    display: grid;
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+
+  @media (min-width: 40em) {
+    .highlights {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  .highlight {
+    background: var(--card);
+    padding: 1.5rem;
+  }
+
+  .highlight h3 {
+    font-size: 1.15rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .highlight p {
+    font-size: 0.98rem;
+    color: var(--ink-2);
+  }
+
+  /* ---------- Split sections ---------- */
+  .split {
+    display: grid;
+    gap: clamp(2.5rem, 6vw, 5rem);
+  }
+
+  @media (min-width: 60em) {
+    .split {
+      grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+      align-items: start;
+    }
+  }
+
+  .split__main h2 {
+    margin-bottom: 1.75rem;
+  }
+
+  .prose {
+    max-width: 40rem;
+  }
+
+  .aside-title {
+    font-family: var(--font-body);
+    font-size: 0.95rem;
+    font-weight: 600;
+    letter-spacing: 0;
+    line-height: 1.4;
+    color: var(--ink-2);
+    margin-bottom: 1.25rem;
+  }
+
+  .split__aside {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    padding: clamp(1.5rem, 3vw, 2.25rem);
+    box-shadow: var(--shadow);
+  }
+
+  .numbered {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 1.5rem;
+  }
+
+  .numbered li {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 1rem;
+  }
+
+  .numbered__n {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: var(--accent);
+    padding-top: 0.15rem;
+  }
+
+  .numbered h4 {
+    font-size: 1.15rem;
+    margin-bottom: 0.35rem;
+  }
+
+  .numbered p {
+    font-size: 0.98rem;
+    color: var(--ink-2);
+  }
+
+  /* ---------- AI ---------- */
+  .ai-intro {
+    max-width: 52rem;
+    margin-bottom: clamp(2rem, 4vw, 3rem);
+  }
+
+  .ai-grid {
+    display: grid;
+    gap: clamp(2.5rem, 6vw, 5rem);
+  }
+
+  @media (min-width: 60em) {
+    .ai-grid {
+      grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+    }
+  }
+
+  .agents-card {
+    display: grid;
+    gap: 0.3rem;
+    margin-top: 2rem;
+    padding: 1.4rem 1.5rem;
+    border-radius: var(--radius);
+    background: var(--night);
+    color: var(--on-night);
+    text-decoration: none;
+    transition: transform 0.3s var(--ease-out), box-shadow 0.3s ease;
+  }
+
+  .agents-card:hover {
+    color: var(--on-night);
+    transform: translateY(-2px);
+    box-shadow: 0 16px 40px -18px rgb(11 19 34 / 0.6);
+  }
+
+  .agents-card__label {
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent-on-night);
+  }
+
+  .agents-card__name {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    font-weight: 650;
+    letter-spacing: -0.02em;
+  }
+
+  .agents-card__body {
+    color: var(--on-night-2);
+    font-size: 0.98rem;
+  }
+
+  .foundations dl {
+    margin: 0 0 1.75rem;
+    border-top: 1px solid var(--line);
+  }
+
+  .foundations__item {
+    padding: 1.1rem 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .foundations dt {
+    font-family: var(--font-display);
+    font-size: 1.2rem;
+    font-weight: 650;
+    letter-spacing: -0.015em;
+    margin-bottom: 0.2rem;
+  }
+
+  .foundations dd {
+    margin: 0;
+    color: var(--ink-2);
+    font-size: 0.98rem;
+  }
+
+  .text-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  .text-link:hover {
+    text-decoration: underline;
+  }
+
+  /* ---------- Approach ---------- */
+  .approach {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .approach::before {
+    content: '';
+    position: absolute;
+    inset: auto -20% -60% 30%;
+    height: 120%;
+    background: radial-gradient(closest-side, rgb(233 120 90 / 0.16), transparent),
+      radial-gradient(closest-side at 30% 40%, rgb(43 89 195 / 0.25), transparent);
+    pointer-events: none;
+  }
+
+  .approach__inner {
+    position: relative;
+    max-width: calc(52rem + var(--gutter) * 2);
+    margin-inline: auto;
+  }
+
+  .approach h2 {
+    margin-bottom: 2rem;
+  }
+
+  .approach__copy {
+    max-width: 42rem;
+    color: #d6dbe6;
+  }
+
+  .approach__sign {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin: 2.25rem 0;
+  }
+
+  .approach__sign :global(img) {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: 50% 22%;
+    border: 2px solid rgb(255 255 255 / 0.2);
+  }
+
+  .approach__sign div {
+    display: grid;
+    line-height: 1.4;
+  }
+
+  .approach__sign span {
+    color: var(--on-night-2);
+    font-size: 0.95rem;
+  }
+</style>
