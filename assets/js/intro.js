@@ -147,6 +147,14 @@
       ].join(' ');
     }
 
+    // If the photo's box fades out at an edge (a mask), fade the copy the same
+    // way as it flies in, so it lands without a hard edge.
+    for (var m = 0; m < chain.length; m++) {
+      var mcs = getComputedStyle(chain[m]);
+      var mask = mcs.maskImage || mcs.webkitMaskImage;
+      if (mask && mask !== 'none') { win.style.maskImage = win.style.webkitMaskImage = mask; break; }
+    }
+
     var flight = { duration: 1150, easing: 'cubic-bezier(.65,0,.25,1)' };
     run(win, [
       { left: '0px', top: '0px', width: px(vw), height: px(vh), borderRadius: '0px' },
