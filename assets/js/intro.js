@@ -1,4 +1,4 @@
-// Opening sequence shared by every concept (see intro.css).
+// Opening sequence (styles at the end of assets/css/site.css).
 //
 // 1. The sunset photo fades in full screen on black.
 // 2. It holds for a moment.
@@ -8,7 +8,7 @@
 //    and tiles appear around it. The page's real photo is then underneath,
 //    and the copy fades away.
 //
-// Each page starts the sequence from an inline <head> script that adds the
+// The page starts the sequence from an inline <head> script that adds the
 // `kr-intro` classes. Click, tap or any key skips it. It doesn't run with
 // reduced motion, with a #link in the URL, or without JavaScript.
 // `window.krIntro` is a promise that resolves when the page is fully shown.

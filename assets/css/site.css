@@ -1,28 +1,79 @@
-/* Concept: Board, wide. A cinematic photo banner over one row of unevenly sized tiles. */
+/* kieranriley.com
+   A cinematic photo banner over one row of unevenly sized tiles. Each tile
+   opens a detail panel. Colours are tokens so light and dark mode share every rule. */
 
 @font-face {
   font-family: 'Inter';
-  src: url('../assets/fonts/inter-var.woff2') format('woff2');
+  src: url('../fonts/inter-var.woff2') format('woff2');
   font-weight: 100 900;
   font-display: swap;
 }
 
 :root {
+  /* Fixed colours: the photo tiles and the blue tile look the same in both modes */
   --white: #ffffff;
-  --paper: #f6f6f4;
-  --line: #e6e6e2;
-  --ink: #0d0d0e;
-  --ink-2: #45464b;
-  --ink-3: #696a70;
   --black: #0d0d0e;
   --on-black: #f4f4f2;
   --on-black-2: #a9aab0;
   --blue: #3a62c4;
   --blue-on-black: #a3baf0;
+
+  /* Theme colours (light) */
+  --bg: #f6f6f4;
+  --surface: #ffffff;
+  --chip: #f1f1ee;
+  --line: #e6e6e2;
+  --ink: #0d0d0e;
+  --ink-2: #45464b;
+  --ink-3: #696a70;
+  --link: #3a62c4;
+  --focus: #3a62c4;
+  --contrast: #0d0d0e;
+  --on-contrast: #f4f4f2;
+  --on-contrast-2: #a9aab0;
+  --contrast-accent: #a3baf0;
+
   --r: 28px;
   --gap: 12px;
   --ease: cubic-bezier(.2, .7, .2, 1);
   --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  color-scheme: light;
+}
+
+/* Dark mode: follows the device unless the visitor picks a mode with the toggle */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0d0d0e;
+    --surface: #18181b;
+    --chip: #242428;
+    --line: #2c2c31;
+    --ink: #f4f4f2;
+    --ink-2: #c3c4c9;
+    --ink-3: #9c9da3;
+    --link: #a3baf0;
+    --focus: #a3baf0;
+    --contrast: #f4f4f2;
+    --on-contrast: #0d0d0e;
+    --on-contrast-2: #55565c;
+    --contrast-accent: #3a62c4;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0d0d0e;
+  --surface: #18181b;
+  --chip: #242428;
+  --line: #2c2c31;
+  --ink: #f4f4f2;
+  --ink-2: #c3c4c9;
+  --ink-3: #9c9da3;
+  --link: #a3baf0;
+  --focus: #a3baf0;
+  --contrast: #f4f4f2;
+  --on-contrast: #0d0d0e;
+  --on-contrast-2: #55565c;
+  --contrast-accent: #3a62c4;
+  color-scheme: dark;
 }
 
 *, *::before, *::after { box-sizing: border-box; }
@@ -35,7 +86,7 @@ body {
   font-size: 1rem;
   line-height: 1.5;
   color: var(--ink);
-  background: var(--paper);
+  background: var(--bg);
   -webkit-font-smoothing: antialiased;
 }
 
@@ -86,7 +137,7 @@ a { color: inherit; }
   padding: 18px;
   overflow: hidden;
   border-radius: var(--r);
-  background: var(--white);
+  background: var(--surface);
   transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
   transition: transform .6s var(--ease);
 }
@@ -107,7 +158,7 @@ a { color: inherit; }
   z-index: 2;
   border-radius: var(--r);
 }
-.tile h2 a:focus-visible::after { outline: 3px solid var(--blue); outline-offset: -3px; }
+.tile h2 a:focus-visible::after { outline: 3px solid var(--focus); outline-offset: -3px; }
 .tile > p {
   margin-top: 8px;
   font-size: .9375rem;
@@ -126,11 +177,11 @@ a { color: inherit; }
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background: var(--paper);
+  background: var(--chip);
   color: var(--ink);
   transition: transform .5s var(--ease), background-color .25s, color .25s;
 }
-.tile:hover .go, .tile:focus-within .go { background: var(--ink); color: var(--white); transform: rotate(90deg); }
+.tile:hover .go, .tile:focus-within .go { background: var(--ink); color: var(--surface); transform: rotate(90deg); }
 .tile:hover .go.ext, .tile:focus-within .go.ext { transform: translate(2px, -2px); }
 
 /* Photo banner */
@@ -152,7 +203,8 @@ a { color: inherit; }
     linear-gradient(180deg, rgba(13,13,14,.55) 0%, rgba(13,13,14,0) 22%, rgba(13,13,14,0) 38%, rgba(13,13,14,.9) 66%, rgba(13,13,14,.96) 100%);
 }
 .hero-top, .hero-body { position: relative; z-index: 1; }
-.hero-top { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+.hero-top { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+.hero-meta { display: flex; align-items: center; gap: 12px; }
 .logo {
   font-weight: 650;
   font-size: 1.0625rem;
@@ -190,7 +242,7 @@ a { color: inherit; }
   white-space: nowrap;
 }
 .t-ai .go { background: var(--white); color: var(--blue); }
-.t-ai:hover .go, .t-ai:focus-within .go { background: var(--ink); color: var(--white); }
+.t-ai:hover .go, .t-ai:focus-within .go { background: var(--black); color: var(--white); }
 
 /* About tile. The photo sits behind the heading without the heading needing
    its own positioning, so the heading's link still covers the whole tile. */
@@ -201,7 +253,8 @@ a { color: inherit; }
 .tile-bg::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(13,13,14,0) 50%, rgba(13,13,14,.85) 100%); }
 .t-about h2 { padding-right: 44px; }
 .t-about h2 a:focus-visible::after { outline-color: var(--blue-on-black); }
-.t-about .go { background: var(--white); z-index: 1; }
+.t-about .go { background: var(--white); color: var(--black); z-index: 1; }
+.t-about:hover .go, .t-about:focus-within .go { background: var(--black); color: var(--white); }
 
 /* Quote tile */
 .t-quote { justify-content: space-between; padding: 22px; }
@@ -221,13 +274,13 @@ a { color: inherit; }
 .t-agents .go { top: 12px; bottom: auto; }
 
 /* Dark contact tile */
-.t-contact { background: var(--black); color: var(--on-black); padding: 22px; min-height: 0; }
+.t-contact { background: var(--contrast); color: var(--on-contrast); padding: 22px; min-height: 0; }
 .t-contact h2 { font-size: 1.75rem; letter-spacing: -0.04em; line-height: 1.04; }
-.t-contact h2 .dim { color: var(--on-black-2); }
-.t-contact > p { color: var(--on-black-2); padding-bottom: 0; padding-right: 52px; max-width: none; }
-.t-contact .go { background: var(--blue-on-black); color: var(--black); }
-.t-contact:hover .go, .t-contact:focus-within .go { background: var(--white); color: var(--black); }
-.t-contact h2 a:focus-visible::after { outline-color: var(--blue-on-black); }
+.t-contact h2 .dim { color: var(--on-contrast-2); }
+.t-contact > p { color: var(--on-contrast-2); padding-bottom: 0; padding-right: 52px; max-width: none; }
+.t-contact .go { background: var(--contrast-accent); color: var(--contrast); }
+.t-contact:hover .go, .t-contact:focus-within .go { background: var(--on-contrast); color: var(--contrast); }
+.t-contact h2 a:focus-visible::after { outline-color: var(--contrast-accent); }
 
 @media (max-width: 699px) {
   .t-contact .go { bottom: 50%; margin-bottom: -20px; right: 18px; }
@@ -339,7 +392,7 @@ a { color: inherit; }
 .details { display: grid; gap: var(--gap); max-width: 1064px; margin: 0 auto; padding: 0 var(--gap) var(--gap); }
 .detail {
   position: relative;
-  background: var(--white);
+  background: var(--surface);
   border-radius: var(--r);
   padding: clamp(22px, 5vw, 60px);
   scroll-margin-top: var(--gap);
@@ -374,23 +427,23 @@ h3 + .rows { margin-top: 14px; }
   padding: 13px 22px;
   border-radius: 999px;
   background: var(--ink);
-  color: var(--white);
+  color: var(--surface);
   font-weight: 550;
   text-decoration: none;
   transition: background-color .25s, transform .4s var(--ease);
 }
 .btn::after { content: '\2197'; font-size: .95em; transition: transform .4s var(--ease); }
-.btn:hover { background: var(--blue); }
+.btn:hover { background: var(--blue); color: var(--white); }
 .btn:hover::after { transform: translate(2px, -2px); }
-.btn:focus-visible, .text-link:focus-visible, .close:focus-visible { outline: 3px solid var(--blue); outline-offset: 3px; }
-.text-link { color: var(--blue); text-underline-offset: 3px; border-radius: 3px; }
+.btn:focus-visible, .text-link:focus-visible, .close:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
+.text-link { color: var(--link); text-underline-offset: 3px; border-radius: 3px; }
 
-.portrait { display: block; border-radius: 20px; overflow: hidden; aspect-ratio: 4 / 4.6; max-height: 420px; background: var(--paper); }
+.portrait { display: block; border-radius: 20px; overflow: hidden; aspect-ratio: 4 / 4.6; max-height: 420px; background: var(--chip); }
 .portrait img { width: 100%; height: 100%; object-fit: cover; object-position: 45% 30%; }
 .about h2 { max-width: 18ch; }
 .about h3 { margin-top: 28px; }
 .tech { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 18px; }
-.tech li { font-family: var(--mono); font-size: .8125rem; padding: 5px 11px; border-radius: 999px; background: var(--paper); color: var(--ink-2); }
+.tech li { font-family: var(--mono); font-size: .8125rem; padding: 5px 11px; border-radius: 999px; background: var(--chip); color: var(--ink-2); }
 
 .svc { display: grid; gap: 28px; margin-top: 28px; }
 .svc h3 { font-size: 1.1875rem; letter-spacing: -0.025em; }
@@ -416,12 +469,12 @@ h3 + .rows { margin-top: 14px; }
   padding: 0;
   border: 0;
   border-radius: 50%;
-  background: var(--paper);
+  background: var(--chip);
   color: var(--ink);
   cursor: pointer;
   transition: background-color .25s, color .25s, transform .5s var(--ease);
 }
-.close:hover { background: var(--ink); color: var(--white); transform: rotate(90deg); }
+.close:hover { background: var(--ink); color: var(--surface); transform: rotate(90deg); }
 .close[hidden] { display: none; }
 
 @media (min-width: 800px) {
@@ -476,3 +529,104 @@ html.js .sub { animation: rise .9s var(--ease) backwards; animation-delay: .75s;
 }
 
 .nb { white-space: nowrap; }
+
+/* ---------- Light and dark toggle ---------- */
+
+.theme {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: 1px solid rgb(255 255 255 / .28);
+  border-radius: 50%;
+  background: rgb(13 13 14 / .35);
+  color: var(--on-black);
+  cursor: pointer;
+  transition: background-color .25s, border-color .25s;
+}
+.theme:hover { background: rgb(255 255 255 / .16); border-color: rgb(255 255 255 / .5); }
+.theme svg { width: 16px; height: 16px; }
+/* Shows the mode you'd switch to: a moon in light mode, a sun in dark mode */
+.theme .sun, :root[data-mode="dark"] .theme .moon { display: none; }
+:root[data-mode="dark"] .theme .sun { display: block; }
+
+/* ---------- Page not found ---------- */
+
+.nf { display: grid; place-items: center; min-height: 100vh; min-height: 100dvh; padding: var(--gap); }
+.nf .tile { width: min(560px, 100%); padding: clamp(28px, 6vw, 48px); gap: 14px; }
+.nf h1 { font-size: clamp(2rem, 6vw, 3rem); line-height: 1.04; font-weight: 600; letter-spacing: -0.04em; }
+.nf p { color: var(--ink-2); }
+.nf .btn { align-self: flex-start; }
+.nf .btn::after { content: '\2192'; }
+
+/* ---------- Opening sequence (see assets/js/intro.js) ---------- */
+
+
+/* Black cover from the very first paint, before intro.js has built the layer */
+html.kr-intro-cover::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 2147483000;
+  background: #0d0d0e;
+}
+
+/* Hold every load animation at its first frame until the photo has landed */
+html.kr-intro-hold *,
+html.kr-intro-hold *::before,
+html.kr-intro-hold *::after {
+  animation-play-state: paused !important;
+}
+
+.kr-intro {
+  position: fixed;
+  inset: 0;
+  z-index: 2147483001;
+  cursor: default;
+}
+
+.kr-intro__bg {
+  position: absolute;
+  inset: 0;
+  background: #0d0d0e;
+}
+
+.kr-intro__win {
+  position: absolute;
+  overflow: hidden;
+  will-change: left, top, width, height, border-radius;
+}
+
+.kr-intro__win img {
+  position: absolute;
+  max-width: none;
+  object-fit: cover;
+  will-change: left, top, width, height;
+}
+
+.kr-intro__skip {
+  position: absolute;
+  right: max(16px, env(safe-area-inset-right, 0px));
+  bottom: max(16px, env(safe-area-inset-bottom, 0px));
+  padding: 8px 14px;
+  border: 1px solid rgb(255 255 255 / 0.25);
+  border-radius: 999px;
+  background: rgb(13 13 14 / 0.4);
+  color: #f4f4f2;
+  font: 500 13px/1 'Inter', system-ui, sans-serif;
+  cursor: pointer;
+}
+
+.kr-intro__skip:focus-visible {
+  outline: 2px solid #a3baf0;
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html.kr-intro-cover::before,
+  .kr-intro {
+    display: none;
+  }
+}

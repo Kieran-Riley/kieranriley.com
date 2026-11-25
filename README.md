@@ -2,57 +2,59 @@
 
 Personal website for Kieran Riley, freelance full-stack software developer.
 
-Plain HTML, CSS and a little vanilla JavaScript, served by GitHub Pages. There's no build step, framework or `npm install`. Edit a file, push, and it's live.
+It's plain HTML, CSS and a little vanilla JavaScript, served by GitHub Pages as-is. There's no build step and no `npm install`: edit a file, push, and it's live.
+
+## How it works
+
+The whole site is one screen, the **board**:
+- a wide photo banner with the headline
+- a row of tiles of different sizes below it
+
+Clicking a tile opens a detail panel that grows out of it. Each panel has its own link (`/#ai`, `/#services`, `/#about`, `/#approach`, `/#contact`), and the back button and Esc both close it.
+
+On first load, an **opening sequence** plays:
+1. the sunset photo fades in full screen
+2. it shrinks into the banner
+3. the tiles rise in around it
+
+It's skipped when the visitor prefers reduced motion or arrives on a panel link, and any click or key skips it too.
+
+**Light and dark mode** follow the visitor's device setting. The round button in the banner lets them switch, and their choice is remembered on that device.
 
 ## Files
 
-| Path                      | What it is                                                         |
-| ------------------------- | ------------------------------------------------------------------ |
-| `index.html`              | About page (`/`)                                                   |
-| `work-with-me.html`       | Work With Me page (`/work-with-me`)                                |
-| `404.html`                | Page not found                                                     |
-| `variations.html`         | Hero design options to compare. Not linked or indexed; delete once chosen. |
-| `assets/css/styles.css`   | All styles. Colours are variables at the top.                      |
-| `assets/js/main.js`       | Page-load and scroll animations, header behaviour, photo parallax  |
-| `assets/js/stream.js`     | The animated "code stream" used in the dark hero variations        |
-| `assets/fonts/`           | Inter, self-hosted                                                 |
-| `assets/img/`             | Resized WebP/JPEG versions of the photos                           |
-| `media/`                  | Original photos                                                    |
-| `og-image.jpg`            | Image shown when the site is shared on social media (1200×630)     |
-| `sitemap.xml`, `robots.txt`, `CNAME` | SEO files and the custom domain for GitHub Pages        |
+| Path                     | What it is                                                                 |
+| ------------------------ | -------------------------------------------------------------------------- |
+| `index.html`             | The site: the board, and the detail panels below it                        |
+| `assets/css/site.css`    | All styles. Colour tokens for light and dark mode are at the top.          |
+| `assets/js/site.js`      | Opening and closing panels, tile tilt, and the light/dark toggle            |
+| `assets/js/intro.js`     | The opening sequence                                                       |
+| `assets/fonts/`          | Inter, self-hosted                                                         |
+| `assets/img/`            | Resized WebP/JPEG photos                                                   |
+| `media/`                 | Original photos                                                            |
+| `work-with-me.html`      | Redirects old `/work-with-me` links to the services panel                  |
+| `404.html`               | Page not found                                                             |
+| `og-image.jpg`           | Image shown when the site is shared (1200×630)                             |
+| `sitemap.xml`, `robots.txt`, `CNAME` | SEO files and the custom domain                              |
+
+## Editing content
+
+All copy lives in `index.html`:
+- tiles are the `<article class="tile">` elements inside `#board`
+- panels are the `<section class="detail">` elements inside `#details`
+
+To add a tile that opens a panel, give its heading link `href="#your-id" data-open`, and add a `<section class="detail" id="your-id">`.
+
+Without JavaScript, the panels simply appear as sections below the board.
 
 ## Colours
 
-The palette follows a 60/30/10 split:
-
-- 60%: white and a soft grey (`--white`, `--paper`)
-- 30%: near-black for text and dark sections (`--ink`, `--black`)
-- 10%: a quiet blue for small accents only, such as links, the dot in the logo, focus rings and button hovers (`--blue`)
-
-## Animations
-
-- headlines slide up line by line on load
-- the hero photo opens out and slowly zooms as you scroll
-- sections fade up as they scroll into view
-- the header hides when you scroll down and comes back when you scroll up
-- pages cross-fade between each other in browsers that support it
-
-All of it switches off for visitors who've asked their device for reduced motion. If the JavaScript fails to load, everything still appears after a moment.
-
-## Contact
-
-There's no contact form. Visitors are pointed to LinkedIn, so there's nothing to spam, no form service to pay for, and no personal data stored by the site.
-
-## Updating photos
-
-Photos are pre-sized so pages load quickly. To add or replace one, export it at a couple of widths (around 800px and 1400px is plenty) as `.webp`, plus a `.jpg` fallback, put them in `assets/img/`, and update the `srcset` in the HTML.
+Mostly white and near-black with a quiet blue accent, roughly a 60/30/10 split. In dark mode the white tiles become charcoal, and the dark "Get in touch" tile flips to light so it still stands out.
 
 ## Previewing locally
-
-Any static file server works, for example:
 
 ```sh
 python3 -m http.server 8000
 ```
 
-Then open http://localhost:8000/. Clean URLs like `/work-with-me` work on GitHub Pages; locally you may need `/work-with-me.html`.
+Then open http://localhost:8000/.

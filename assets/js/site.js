@@ -1,6 +1,6 @@
-/* Concept: Board, centre. Tiles open into a panel that grows out of the tile.
-   The panel is revealed with a clip-path window that starts on the tile and
-   widens to the full panel, so the rounded corners never stretch. */
+/* kieranriley.com. Tiles open into a panel that grows out of the tile.
+   The panel is never scaled: it slides from the tile while a rounded clip-path
+   window widens from the tile's size, so the corners keep their true radius. */
 (function () {
   'use strict';
 
@@ -44,18 +44,27 @@
     running.forEach(function (a) { try { a.cancel(); } catch (e) {} });
     running = [];
   }
-  var FULL = 'inset(0px 0px 0px 0px round 28px)';
-  // The tile's box, expressed as an inset window on the panel.
-  function fromRect(panel, tile) {
+  function byHash(id) {
+    var p = byId(id);
+    if (p) return p;
+    var el = id ? document.getElementById(id) : null;
+    el = el && el.closest ? el.closest('.detail') : null;
+    return el && panels.indexOf(el) > -1 ? el : null;
+  }
+  /* Start frame: the panel's centre sits on the tile's centre, clipped to the tile's size. */
+  function fromTile(panel, tile) {
     var p = panel.getBoundingClientRect();
     var t = tile.getBoundingClientRect();
-    var minW = Math.min(p.width, 160), minH = Math.min(p.height, 120);
-    var l = Math.max(0, Math.min(t.left - p.left, p.width - minW));
-    var r = Math.max(0, Math.min(p.right - t.right, p.width - minW - l));
-    var tp = Math.max(0, Math.min(t.top - p.top, p.height - minH));
-    var bt = Math.max(0, Math.min(p.bottom - t.bottom, p.height - minH - tp));
-    var px = function (n) { return Math.round(n) + 'px'; };
-    return 'inset(' + px(tp) + ' ' + px(r) + ' ' + px(bt) + ' ' + px(l) + ' round 28px)';
+    var dx = (t.left + t.width / 2) - (p.left + p.width / 2);
+    var dy = (t.top + t.height / 2) - (p.top + p.height / 2);
+    var ix = Math.max(0, (p.width - t.width) / 2);
+    var iy = Math.max(0, (p.height - t.height) / 2);
+    var r = getComputedStyle(panel).borderTopLeftRadius || '28px';
+    return {
+      transform: 'translate(' + dx.toFixed(1) + 'px,' + dy.toFixed(1) + 'px)',
+      clipPath: 'inset(' + iy.toFixed(1) + 'px ' + ix.toFixed(1) + 'px round ' + r + ')',
+      rest: 'inset(0px 0px round ' + r + ')'
+    };
   }
 
   function open(id, animate) {
@@ -74,13 +83,14 @@
     var tile = tileFor(id);
     if (animate && tile && canAnimate && !reduce.matches) {
       var inner = panel.querySelector('.detail-in');
+      var f = fromTile(panel, tile);
       running.push(panel.animate(
-        [{ clipPath: fromRect(panel, tile), opacity: .5 }, { clipPath: FULL, opacity: 1 }],
+        [{ transform: f.transform, clipPath: f.clipPath, opacity: .5 }, { transform: 'translate(0px,0px)', clipPath: f.rest, opacity: 1 }],
         { duration: 560, easing: EASE }
       ));
       if (inner) running.push(inner.animate(
         [{ opacity: 0, transform: 'translateY(14px)' }, { opacity: 1, transform: 'none' }],
-        { duration: 440, delay: 240, easing: EASE, fill: 'backwards' }
+        { duration: 420, delay: 220, easing: EASE, fill: 'backwards' }
       ));
     }
     var c = panel.querySelector('.close');
@@ -106,9 +116,10 @@
 
     if (animate && tile && canAnimate && !reduce.matches) {
       details.classList.add('is-closing');
+      var f = fromTile(panel, tile);
       var anim = panel.animate(
-        [{ clipPath: FULL, opacity: 1 }, { clipPath: fromRect(panel, tile), opacity: 1, offset: .7 }, { clipPath: fromRect(panel, tile), opacity: 0 }],
-        { duration: 420, easing: 'cubic-bezier(.5,0,.3,1)' }
+        [{ transform: 'translate(0px,0px)', clipPath: f.rest, opacity: 1 }, { transform: f.transform, clipPath: f.clipPath, opacity: 0 }],
+        { duration: 360, easing: 'cubic-bezier(.5,0,.3,1)' }
       );
       running.push(anim);
       anim.onfinish = done;
@@ -128,7 +139,12 @@
 
   function sync(animate) {
     var id = decodeURIComponent(location.hash.slice(1));
-    if (id && byId(id)) open(id, animate);
+    var p = id ? byHash(id) : null;
+    if (p) {
+      open(p.id, animate);
+      var part = p.id !== id ? document.getElementById(id) : null;
+      if (part) part.scrollIntoView({ block: 'start' });
+    }
     else close(animate);
   }
 
@@ -176,4 +192,28 @@
       tile.style.removeProperty('--ry');
     });
   });
+
+  /* Light and dark mode. Follows the device until the visitor picks one;
+     the choice is remembered on this device. */
+  var toggle = document.querySelector('.theme');
+  var darkQuery = window.matchMedia('(prefers-color-scheme: dark)');
+  function mode() {
+    return root.getAttribute('data-theme') || (darkQuery.matches ? 'dark' : 'light');
+  }
+  function showMode() {
+    var m = mode();
+    root.setAttribute('data-mode', m);
+    if (toggle) toggle.setAttribute('aria-label', m === 'dark' ? 'Switch to light mode' : 'Switch to dark mode');
+  }
+  if (toggle) {
+    toggle.hidden = false;
+    toggle.addEventListener('click', function () {
+      var next = mode() === 'dark' ? 'light' : 'dark';
+      root.setAttribute('data-theme', next);
+      try { localStorage.setItem('theme', next); } catch (e) {}
+      showMode();
+    });
+  }
+  if (darkQuery.addEventListener) darkQuery.addEventListener('change', showMode);
+  showMode();
 })();
