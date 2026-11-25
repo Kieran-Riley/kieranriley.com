@@ -299,13 +299,6 @@ a { color: inherit; }
   .hero h1 .line { white-space: nowrap; }
   .sub { font-size: clamp(.875rem, 1.25cqw, 1.0625rem); margin-top: clamp(10px, 3.4cqh, 20px); }
 
-  /* The headshot tile climbs into the banner, with a paper-coloured ring so it reads as a notch */
-  .t-about {
-    --lift: clamp(28px, 6vh, 60px);
-    margin-top: calc(-1 * var(--lift));
-    z-index: 3;
-    box-shadow: 0 0 0 var(--gap) var(--paper);
-  }
   .t-about h2 { padding-right: 0; font-size: clamp(1rem, 1.2vw, 1.1875rem); }
   .t-about .go { top: 12px; right: 12px; bottom: auto; }
 
