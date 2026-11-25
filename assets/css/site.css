@@ -342,8 +342,8 @@ a { color: inherit; }
   .hero-bg {
     right: auto;
     width: max(52%, calc(100cqh * 1.35));
-    -webkit-mask-image: linear-gradient(90deg, #000 55%, transparent 100%);
-    mask-image: linear-gradient(90deg, #000 55%, transparent 100%);
+    -webkit-mask-image: linear-gradient(90deg, #000 82%, transparent 100%);
+    mask-image: linear-gradient(90deg, #000 82%, transparent 100%);
   }
   .hero-bg img { object-position: 50% 46%; }
   .hero-bg::after {
