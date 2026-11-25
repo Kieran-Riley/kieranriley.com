@@ -384,6 +384,11 @@ html:not(.js) .sheet-body { max-width: 1180px; margin: 0 auto; }
 html:not(.js) .board { grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr)); grid-template-areas: none; grid-template-rows: none; }
 html:not(.js) .board > * { grid-area: auto !important; grid-column: auto !important; }
 html:not(.js) .t-photo { min-height: 300px; }
+@media (min-width: 900px) {
+  html:not(.js) .board { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  html:not(.js) .board > .t-feat, html:not(.js) .board > .t-note { grid-column: span 2 !important; }
+  html:not(.js) .board > .t-lead, html:not(.js) .board > .t-mention { grid-column: span 3 !important; }
+}
 html:not(.js) .tile-more { margin-top: 4px; }
 
 /* ---------- With JS: one sheet that slides in over the photo ---------- */

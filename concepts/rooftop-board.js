@@ -115,7 +115,7 @@
     var btn = tile.querySelector('.more');
     var more = tile.querySelector('.tile-more');
     var wasCovering = tile.dataset.covering === '1';
-    var hadFocus = more.contains(document.activeElement) || document.activeElement === more;
+    var hadFocus = more.contains(document.activeElement) || document.activeElement === document.body;
     expanded = null;
     stop();
     delete tile.dataset.covering;
