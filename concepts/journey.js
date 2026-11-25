@@ -49,6 +49,7 @@
     stops = [];
     geo = panels.map(function (p) {
       var g = { left: p.offsetLeft, width: p.offsetWidth };
+      g.rest = g.left - pad;   // offset at which the panel sits at the left edge
       g.start = clamp(g.left - pad, 0, max);
       stops.push(g.start);
       if (g.width > vw + 40) stops.push(clamp(g.left + g.width + pad - vw, 0, max));
@@ -98,11 +99,10 @@
     track.style.transform = 'translate3d(' + (-x).toFixed(2) + 'px,0,0)';
     if (bar) bar.style.transform = 'scaleX(' + (max ? x / max : 0).toFixed(4) + ')';
 
-    var centre = x + vw / 2;
     for (var i = 0; i < movers.length; i++) {
       var m = movers[i], g = geo[m.panel];
       if (g.left - x > vw * 1.5 || g.left + g.width - x < -vw * 0.5) continue;   // far off screen
-      var d = clamp(g.left + g.width / 2 - centre, -vw * 1.2, vw * 1.2);
+      var d = clamp(g.rest - x, -vw * 1.2, vw * 1.2);     // 0 when the panel is at rest
       m.el.style.transform = 'translate3d(' + (d * m.speed).toFixed(2) + 'px,0,0)';
     }
 

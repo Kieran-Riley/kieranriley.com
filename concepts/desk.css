@@ -201,6 +201,7 @@ h1 .dim { color: #b9bac1; }
 .card--ai .card__lead { margin-top: .75em; }
 .card__thumb {
   width: 100%;
+  height: auto;
   aspect-ratio: 16 / 10;
   object-fit: cover;
   object-position: 50% 22%;
@@ -208,7 +209,10 @@ h1 .dim { color: #b9bac1; }
   border-radius: .7em;
   background: var(--paper);
 }
-html:not(.js) .card__thumb, html:not(.js) .card__go { display: none; }
+.card__list { margin-top: .7em; font-size: .9375em; color: var(--fg2); }
+.card__list li { padding: .34em 0; border-top: 1px solid var(--ln); }
+.card__list li:last-child { padding-bottom: 0; }
+html:not(.js) .card__thumb, html:not(.js) .card__go, html:not(.js) .card__list { display: none; }
 
 /* The title becomes a button (added by JS) that covers the whole card. */
 .card__btn {
@@ -270,7 +274,7 @@ html.js .card .card__detail { display: none; }
 .chips li { padding: .3em .7em; font-family: var(--mono); font-size: .8125rem; color: var(--fg); background: var(--chip); border-radius: 999px; }
 
 .with-photo { display: grid; gap: 22px; }
-.portrait img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; object-position: 45% 30%; border-radius: 16px; background: var(--paper); }
+.portrait img { width: 100%; height: auto; aspect-ratio: 4 / 5; object-fit: cover; object-position: 45% 30%; border-radius: 16px; background: var(--paper); }
 html:not(.js) .portrait img { aspect-ratio: 16 / 10; }
 .card__detail.with-photo > * + * { margin-top: 0; }
 
@@ -445,7 +449,10 @@ html.is-open { overflow: hidden; }
   html.js .card--agents { width: 14.5em; }
   html.js .card--contact { width: 13.5em; }
   html.js .is-tidy .card { width: var(--tw, 15.5em); }
-  html.js .is-tidy .card__in { min-height: var(--th, 0); }
+  html.js .is-tidy .card__in { min-height: var(--th, 0); display: flex; flex-direction: column; }
+  html.js .is-tidy .card__lead, html.js .is-tidy .card__list { margin-top: auto; padding-top: .6em; }
+  html.js .is-tidy .card--about .card__lead { margin-top: .5em; padding-top: 0; }
+  html.js .is-tidy .card--ai .card__title { max-width: none; font-size: 1.4em; }
   html.js .card.is-drag { transition: none; cursor: grabbing; }
   html.js .card.is-away { visibility: hidden; }
 

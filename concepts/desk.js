@@ -234,7 +234,9 @@
     current = card;
     const detail = card.querySelector('.card__detail');
     winTitle.textContent = card.querySelector('.card__btn').textContent;
-    winLead.textContent = card.querySelector('.card__lead').textContent;
+    const lead = card.querySelector('.card__lead');
+    winLead.textContent = lead ? lead.textContent : '';
+    winLead.hidden = !lead;
     winName.textContent = card.dataset.name || card.id;
     win.dataset.kind = card.id;
     win.classList.toggle('t-dark', card.classList.contains('t-dark'));

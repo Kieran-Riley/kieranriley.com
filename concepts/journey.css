@@ -33,7 +33,7 @@ html { -webkit-text-size-adjust: 100%; overflow-x: clip; }
 
 body {
   margin: 0;
-  padding: var(--bar) var(--gap) var(--gap);
+  padding: calc(var(--bar) + 6px) var(--gap) var(--gap);
   font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
   line-height: 1.5;
   color: var(--ink);
@@ -116,7 +116,7 @@ html:not(.js) .progress { display: none; }
   position: relative;
   border-radius: var(--r);
   container-type: inline-size;
-  scroll-margin-top: var(--bar);
+  scroll-margin-top: calc(var(--bar) + 6px);
 }
 .inner { position: relative; padding: clamp(28px, 6cqw, 72px) clamp(22px, 5cqw, 72px); }
 
@@ -135,7 +135,7 @@ html:not(.js) .progress { display: none; }
 .hero {
   overflow: hidden;
   background: var(--black); color: var(--on-black);
-  min-height: min(calc(100svh - var(--bar) - var(--gap)), 860px);
+  min-height: min(calc(100svh - var(--bar) - var(--gap) - 6px), 860px);
   display: grid;
 }
 .hero .photo img { object-position: 50% 40%; }
@@ -166,6 +166,15 @@ html:not(.js) .progress { display: none; }
       linear-gradient(to top, rgba(13,13,14,.86) 0%, rgba(13,13,14,.36) 46%, rgba(13,13,14,.12) 100%);
   }
   .hero .photo img { object-position: 50% 44%; }
+}
+@container (min-width: 1000px) {
+  .hero .photo::after {
+    background:
+      linear-gradient(to left, rgba(13,13,14,.8) 0%, rgba(13,13,14,.5) 44%, rgba(13,13,14,0) 76%),
+      linear-gradient(to top, rgba(13,13,14,.84) 0%, rgba(13,13,14,.3) 40%, rgba(13,13,14,.1) 100%);
+  }
+  .hero-copy { align-self: flex-end; width: min(54%, 52rem); }
+  .hero h1 { font-size: clamp(2.5rem, 5.3cqw, 6rem); }
 }
 
 /* ---------- 2. About ---------- */
@@ -339,7 +348,7 @@ html.h .journey { position: relative; }
 html.h .viewport { position: sticky; top: 0; height: 100vh; overflow: clip; }
 html.h .track {
   flex-direction: row; width: max-content; height: 100%;
-  padding: var(--bar) var(--gap) var(--gap);
+  padding: calc(var(--bar) + 6px) var(--gap) var(--gap);
   will-change: transform;
 }
 html.h .panel { flex: none; height: 100%; }
@@ -350,14 +359,14 @@ html.h .about { width: clamp(880px, 80vw, 1220px); }
 html.h .aside { width: clamp(24rem, 33vw, 31rem); }
 html.h .ai { width: clamp(980px, 90vw, 1420px); }
 html.h .services { width: clamp(1000px, 94vw, 1480px); }
-html.h .approach { width: clamp(1500px, 122vw, 1900px); }
+html.h .approach { width: clamp(1700px, 140vw, 2250px); }
 
 /* The photos are wider than their panels so they can lag behind the track. */
 html.h .hero .photo { left: -24%; right: 0; will-change: transform; }
 html.h .contact .photo { left: 0; right: -24%; will-change: transform; }
 
 html.h .hero .inner { display: flex; }
-html.h .hero h1 { font-size: clamp(2.5rem, min(6cqw, 10.4vh), 6.25rem); }
+html.h .hero h1 { font-size: clamp(2.5rem, min(5.3cqw, 10vh), 6rem); }
 html.h .hint { display: inline-flex; }
 html.h .hint svg { animation: nudge 2.4s var(--ease) infinite; }
 @keyframes nudge { 0%, 100% { transform: none; } 50% { transform: translateX(6px); } }
@@ -369,9 +378,22 @@ html.h .aside-copy { margin-block: auto; }
 html.h .ai .inner { align-items: stretch; }
 html.h .ai-lead { align-content: center; }
 html.h .ai-detail { align-content: center; }
-html.h .ai h2 { font-size: clamp(2.5rem, min(6.4cqw, 12vh), 6rem); }
+html.h .ai .inner { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); padding-bottom: 16vh; }
+html.h .ai h2 { font-size: clamp(2.5rem, min(7.4cqw, 13.5vh), 7rem); }
+html.h .ai-lead { gap: 1.5rem; }
+html.h .ticks li { padding: 1.05rem 0; font-size: 1.125rem; }
 html.h .services .inner { grid-template-rows: auto 1fr; }
-html.h .card ul { margin-top: auto; }
+html.h .card h3 { font-size: 1.875rem; }
+html.h .card p { font-size: 1.0625rem; max-width: 24rem; }
+html.h .card li { padding: .78rem 0; font-size: 1rem; }
+html.h .services h2 { font-size: clamp(2.2rem, min(4.6cqw, 8vh), 4rem); }
+html.h .approach h2 { font-size: clamp(2.4rem, min(3.5cqw, 8.6vh), 4.5rem); }
+html.h .approach .inner { grid-template-columns: minmax(0, .58fr) minmax(0, 1fr); gap: 5rem; }
+html.h .how { gap: 1.75rem; }
+html.h .principles { gap: var(--gap); }
+html.h .principles li { min-height: 18rem; padding: 1.5rem; border: 0; border-radius: 20px; background: var(--white); }
+html.h .principles h4 { font-size: 1.3125rem; }
+html.h .principles p { font-size: 1rem; margin-top: .75rem; }
 html.h .contact h2 { font-size: clamp(1.9rem, min(4cqw, 6.6vh), 3.5rem); }
 
 html.h.anim [data-r] { translate: 56px 0; }
