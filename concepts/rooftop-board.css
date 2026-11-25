@@ -292,6 +292,8 @@ a { color: inherit; }
 .more[aria-expanded="true"] .go { transform: rotate(45deg); }
 .face:hover .tile-bg img { transform: scale(1.05); }
 
+.b-service .t-mini { order: 2; }
+.b-service .t-cta { order: 3; }
 .t-mini .face { min-height: 150px; justify-content: flex-end; color: var(--white); }
 .t-mini .more { position: static; padding: 0; }
 .t-mini .more-label { position: relative; font-size: 1.0625rem; font-weight: 600; letter-spacing: -0.02em; text-decoration: none; }
@@ -308,7 +310,7 @@ a { color: inherit; }
 .more-photo { display: none; }
 .less { display: none; }
 .big { font-size: clamp(1.75rem, 5.4cqw, 2.5rem) !important; line-height: 1.05 !important; letter-spacing: -0.04em !important; text-wrap: balance; }
-html.js .tile-more .big { display: none; }
+.tile-more .big { display: none; }
 .arrow-link { font-weight: 550; color: inherit; text-underline-offset: 4px; text-decoration-color: var(--rule); border-radius: 3px; }
 .arrow-link::after { content: '\00a0\2192'; display: inline-block; transition: transform .4s var(--ease); }
 .arrow-link:hover::after { transform: translateX(3px); }
@@ -343,8 +345,9 @@ html.js .tile-more .big { display: none; }
   .b-service { grid-template-areas: "feat feat about" "feat feat about" "note note cta"; }
   .b-about { grid-template-areas: "photo text text" "photo ai ai" "agents agents cta"; }
   .b-contact { grid-template-areas: "lead lead me" "lead lead me" "mention mention links"; }
-  .b-service, .b-about, .b-contact { grid-template-rows: minmax(min-content, 1fr) minmax(min-content, 1fr) auto; }
-  .b-approach { grid-template-rows: auto minmax(min-content, 1fr) minmax(min-content, 1fr); }
+  .b-service, .b-contact { grid-template-rows: minmax(min-content, 1fr) minmax(min-content, 1fr) auto; }
+  .b-about { grid-template-rows: auto minmax(min-content, 1fr) auto; }
+  .b-approach { grid-template-rows: minmax(min-content, 1fr) auto auto; }
 
   .t-feat { grid-area: feat; }
   .t-mini { grid-area: about; }
@@ -367,7 +370,8 @@ html.js .tile-more .big { display: none; }
   .t-agents, .t-ai, .t-mention, .t-links { justify-content: center; }
   .b-approach .t-lead { padding-top: clamp(40px, 9cqw, 84px); }
   .b-approach .t-lead h2 { max-width: 16ch; }
-  .t-how { justify-content: flex-end; }
+  .t-feat h2 { font-size: clamp(1.75rem, 6.4cqw, 3rem); max-width: 12ch; }
+  .t-feat .lede { font-size: clamp(1rem, 2.6cqw, 1.25rem); }
 }
 @container sheet (min-width: 640px) {
   .rows.two { grid-template-columns: 1fr 1fr; column-gap: 24px; }
@@ -465,6 +469,7 @@ html.js.sheet-open .photo img { transform: scale(1.06); }
     display: flex;
     flex-direction: column;
     overflow-y: auto;
+    box-shadow: 0 0 0 2px var(--white);
   }
   html.js .tile-more .big { display: block; }
   html.js .more-in { margin-top: auto; padding: 72px clamp(24px, 5cqw, 40px) clamp(24px, 5cqw, 40px); }
