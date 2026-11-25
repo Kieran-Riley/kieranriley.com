@@ -58,20 +58,53 @@
     var panel = el && el.closest('.detail');
     return panel ? byId(panel.id) : null;
   }
-  /* Start frame: the panel's centre sits on the tile's centre, clipped to the tile's size. */
-  function fromTile(panel, tile) {
+  /* The panel is revealed through a rounded clip-path window that starts on the
+     tile and widens to the full panel, so its corners never stretch. */
+  var RADIUS = 28;
+  var FULL = 'inset(0px 0px 0px 0px round ' + RADIUS + 'px)';
+  function fromRect(panel, tile) {
     var p = panel.getBoundingClientRect();
     var t = tile.getBoundingClientRect();
-    var dx = (t.left + t.width / 2) - (p.left + p.width / 2);
-    var dy = (t.top + t.height / 2) - (p.top + p.height / 2);
-    var ix = Math.max(0, (p.width - t.width) / 2);
-    var iy = Math.max(0, (p.height - t.height) / 2);
-    var r = getComputedStyle(panel).borderTopLeftRadius || '28px';
-    return {
-      transform: 'translate(' + dx.toFixed(1) + 'px,' + dy.toFixed(1) + 'px)',
-      clipPath: 'inset(' + iy.toFixed(1) + 'px ' + ix.toFixed(1) + 'px round ' + r + ')',
-      rest: 'inset(0px 0px round ' + r + ')'
+    var minW = Math.min(p.width, 160), minH = Math.min(p.height, 120);
+    var l = Math.max(0, Math.min(t.left - p.left, p.width - minW));
+    var r = Math.max(0, Math.min(p.right - t.right, p.width - minW - l));
+    var tp = Math.max(0, Math.min(t.top - p.top, p.height - minH));
+    var bt = Math.max(0, Math.min(p.bottom - t.bottom, p.height - minH - tp));
+    var px = function (n) { return Math.round(n) + 'px'; };
+    return 'inset(' + px(tp) + ' ' + px(r) + ' ' + px(bt) + ' ' + px(l) + ' round ' + RADIUS + 'px)';
+  }
+
+  /* About: the tile's photo flies into the panel's portrait (and back on close),
+     so it reads as the same picture. */
+  function flyPhoto(panel, tile, opening, duration, easing) {
+    var from = tile.querySelector('.tile-bg img');
+    var portrait = panel.querySelector('.portrait');
+    if (!from || !portrait) return;
+    var a = tile.getBoundingClientRect();
+    var b = portrait.getBoundingClientRect();
+    var ra = getComputedStyle(tile).borderTopLeftRadius;
+    var rb = getComputedStyle(portrait).borderTopLeftRadius;
+    var start = opening ? a : b, end = opening ? b : a;
+    var layer = document.createElement('div');
+    layer.className = 'photo-flight';
+    layer.setAttribute('aria-hidden', 'true');
+    var img = document.createElement('img');
+    img.alt = '';
+    img.src = from.currentSrc || from.src;
+    layer.appendChild(img);
+    document.body.appendChild(layer);
+    portrait.style.visibility = 'hidden';
+    var box = function (r, radius) {
+      return { left: r.left + 'px', top: r.top + 'px', width: r.width + 'px', height: r.height + 'px', borderRadius: radius };
     };
+    var anim = layer.animate(
+      [box(start, opening ? ra : rb), box(end, opening ? rb : ra)],
+      { duration: duration, easing: easing, fill: 'forwards' }
+    );
+    function done() { portrait.style.visibility = ''; layer.remove(); }
+    anim.onfinish = done;
+    anim.oncancel = done;
+    running.push(anim);
   }
 
   function open(id, animate) {
@@ -90,14 +123,14 @@
     var tile = tileFor(id);
     if (animate && tile && canAnimate && !reduce.matches) {
       var inner = panel.querySelector('.detail-in');
-      var f = fromTile(panel, tile);
+      flyPhoto(panel, tile, true, 600, EASE);
       running.push(panel.animate(
-        [{ transform: f.transform, clipPath: f.clipPath, opacity: .5 }, { transform: 'translate(0px,0px)', clipPath: f.rest, opacity: 1 }],
+        [{ clipPath: fromRect(panel, tile), opacity: .5 }, { clipPath: FULL, opacity: 1 }],
         { duration: 560, easing: EASE }
       ));
       if (inner) running.push(inner.animate(
         [{ opacity: 0, transform: 'translateY(14px)' }, { opacity: 1, transform: 'none' }],
-        { duration: 420, delay: 220, easing: EASE, fill: 'backwards' }
+        { duration: 440, delay: 240, easing: EASE, fill: 'backwards' }
       ));
     }
     var c = panel.querySelector('.close');
@@ -123,10 +156,11 @@
 
     if (animate && tile && canAnimate && !reduce.matches) {
       details.classList.add('is-closing');
-      var f = fromTile(panel, tile);
+      var shut = fromRect(panel, tile);
+      flyPhoto(panel, tile, false, 420, 'cubic-bezier(.5,0,.3,1)');
       var anim = panel.animate(
-        [{ transform: 'translate(0px,0px)', clipPath: f.rest, opacity: 1 }, { transform: f.transform, clipPath: f.clipPath, opacity: 0 }],
-        { duration: 360, easing: 'cubic-bezier(.5,0,.3,1)' }
+        [{ clipPath: FULL, opacity: 1 }, { clipPath: shut, opacity: 1, offset: .7 }, { clipPath: shut, opacity: 0 }],
+        { duration: 420, easing: 'cubic-bezier(.5,0,.3,1)' }
       );
       running.push(anim);
       anim.onfinish = done;
