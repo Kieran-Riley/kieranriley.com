@@ -196,12 +196,14 @@ a { color: inherit; }
 .t-ai:hover .go, .t-ai:focus-within .go { background: var(--ink); color: var(--white); }
 
 /* About tile */
-.t-about { background: var(--black); color: var(--on-black); justify-content: flex-end; min-height: 220px; }
-.tile-bg { position: absolute; inset: 0; }
+.t-about { background: var(--black); color: var(--on-black); justify-content: flex-end; min-height: 220px; isolation: isolate; }
+/* The photo sits behind the heading without the heading needing its own
+   positioning, so the heading's link can still cover the whole tile. */
+.tile-bg { position: absolute; inset: 0; z-index: -1; }
 .tile-bg img { width: 100%; height: 100%; object-fit: cover; object-position: 45% 30%; transition: transform 1.2s var(--ease); }
 .t-about:hover .tile-bg img { transform: scale(1.05); }
 .tile-bg::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(13,13,14,0) 45%, rgba(13,13,14,.82) 100%); }
-.t-about h2 { position: relative; z-index: 1; padding-right: 44px; }
+.t-about h2 { padding-right: 44px; }
 .t-about h2 a:focus-visible::after { outline-color: var(--blue-on-black); }
 .t-about .go { background: var(--white); z-index: 1; }
 
