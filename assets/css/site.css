@@ -27,8 +27,6 @@
   --ink-2: #45464b;
   --ink-3: #696a70;
   --link: #3a62c4;
-  --focus: #3a62c4;
-  --contrast: #0d0d0e;
   --on-contrast: #f4f4f2;
   --on-contrast-2: #a9aab0;
   --contrast-accent: #a3baf0;
@@ -51,8 +49,6 @@
     --ink-2: #c3c4c9;
     --ink-3: #9c9da3;
     --link: #a3baf0;
-    --focus: #a3baf0;
-    --contrast: #f4f4f2;
     --on-contrast: #0d0d0e;
     --on-contrast-2: #55565c;
     --contrast-accent: #3a62c4;
@@ -68,8 +64,6 @@
   --ink-2: #c3c4c9;
   --ink-3: #9c9da3;
   --link: #a3baf0;
-  --focus: #a3baf0;
-  --contrast: #f4f4f2;
   --on-contrast: #0d0d0e;
   --on-contrast-2: #55565c;
   --contrast-accent: #3a62c4;
@@ -158,7 +152,7 @@ a { color: inherit; }
   z-index: 2;
   border-radius: var(--r);
 }
-.tile h2 a:focus-visible::after { outline: 3px solid var(--focus); outline-offset: -3px; }
+.tile h2 a:focus-visible::after { outline: 3px solid var(--link); outline-offset: -3px; }
 .tile > p {
   margin-top: 8px;
   font-size: .9375rem;
@@ -242,7 +236,6 @@ a { color: inherit; }
   white-space: nowrap;
 }
 .t-ai .go { background: var(--white); color: var(--blue); }
-.t-ai:hover .go, .t-ai:focus-within .go { background: var(--black); color: var(--white); }
 
 /* About tile. The photo sits behind the heading without the heading needing
    its own positioning, so the heading's link still covers the whole tile. */
@@ -254,6 +247,8 @@ a { color: inherit; }
 .t-about h2 { padding-right: 44px; }
 .t-about h2 a:focus-visible::after { outline-color: var(--blue-on-black); }
 .t-about .go { background: var(--white); color: var(--black); z-index: 1; }
+/* The white buttons on the blue and photo tiles turn black on hover in both modes */
+.t-ai:hover .go, .t-ai:focus-within .go,
 .t-about:hover .go, .t-about:focus-within .go { background: var(--black); color: var(--white); }
 
 /* Quote tile */
@@ -262,24 +257,23 @@ a { color: inherit; }
 .t-quote .hint { font-family: var(--mono); font-size: .75rem; color: var(--ink-3); padding: 20px 0 6px; margin: 0; }
 
 /* Services tile: one tile, three services listed, opens a panel with all of them */
-.t-svc .go { top: 12px; bottom: auto; }
-.t-svc h2 { padding-right: 46px; min-height: 30px; display: flex; align-items: center; }
+.t-svc .go, .t-agents .go { top: 12px; bottom: auto; }
+.t-svc h2, .t-agents h2 { padding-right: 46px; }
+.t-svc h2 { min-height: 30px; display: flex; align-items: center; }
 .peek { margin-top: auto; padding-top: 14px; font-size: .8125rem; line-height: 1.3; color: var(--ink-2); }
 .peek li { padding: 7px 0; border-top: 1px solid var(--line); }
 
 /* agentsdotne.uk */
 .t-agents { min-height: 0; justify-content: center; }
-.t-agents h2 { padding-right: 46px; }
 .t-agents > p { padding-bottom: 0; font-size: .875rem; }
-.t-agents .go { top: 12px; bottom: auto; }
 
 /* Dark contact tile */
-.t-contact { background: var(--contrast); color: var(--on-contrast); padding: 22px; min-height: 0; }
+.t-contact { background: var(--ink); color: var(--on-contrast); padding: 22px; min-height: 0; }
 .t-contact h2 { font-size: 1.75rem; letter-spacing: -0.04em; line-height: 1.04; }
 .t-contact h2 .dim { color: var(--on-contrast-2); }
 .t-contact > p { color: var(--on-contrast-2); padding-bottom: 0; padding-right: 52px; max-width: none; }
-.t-contact .go { background: var(--contrast-accent); color: var(--contrast); }
-.t-contact:hover .go, .t-contact:focus-within .go { background: var(--on-contrast); color: var(--contrast); }
+.t-contact .go { background: var(--contrast-accent); color: var(--ink); }
+.t-contact:hover .go, .t-contact:focus-within .go { background: var(--on-contrast); color: var(--ink); }
 .t-contact h2 a:focus-visible::after { outline-color: var(--contrast-accent); }
 
 @media (max-width: 699px) {
@@ -371,7 +365,7 @@ a { color: inherit; }
 
   .t-contact { padding: clamp(20px, 1.7vw, 26px); }
   .t-contact h2 { font-size: clamp(1.6rem, 2.3vw, 2.25rem); }
-  .t-contact > p { margin-top: auto; padding-right: 50px; max-width: none; }
+  .t-contact > p { margin-top: auto; padding-right: 50px; }
 }
 
 /* Shorter laptops: same board, fewer words */
@@ -435,7 +429,7 @@ h3 + .rows { margin-top: 14px; }
 .btn::after { content: '\2197'; font-size: .95em; transition: transform .4s var(--ease); }
 .btn:hover { background: var(--blue); color: var(--white); }
 .btn:hover::after { transform: translate(2px, -2px); }
-.btn:focus-visible, .text-link:focus-visible, .close:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
+.btn:focus-visible, .text-link:focus-visible, .close:focus-visible { outline: 3px solid var(--link); outline-offset: 3px; }
 .text-link { color: var(--link); text-underline-offset: 3px; border-radius: 3px; }
 
 .portrait { display: block; border-radius: 20px; overflow: hidden; aspect-ratio: 4 / 4.6; max-height: 420px; background: var(--chip); }
@@ -447,13 +441,13 @@ h3 + .rows { margin-top: 14px; }
 
 .svc { display: grid; gap: 28px; margin-top: 28px; }
 .svc h3 { font-size: 1.1875rem; letter-spacing: -0.025em; }
-.svc p { margin-top: 8px; font-size: .9375rem; min-height: 0; }
+.svc p { margin-top: 8px; font-size: .9375rem; }
 .svc .rows { margin-top: 16px; font-size: .9375rem; }
 .svc .rows li { padding: 10px 0; }
-.svc-cta { margin-top: 22px !important; }
+.detail .svc-cta { margin-top: 22px; }
 .svc > li { scroll-margin-top: 20px; }
 
-.how { display: grid; gap: 0; margin-top: 28px; }
+.how { display: grid; margin-top: 28px; }
 .how li { padding: 16px 0; border-top: 1px solid var(--line); }
 .how p { margin-top: 4px; font-size: .9375rem; }
 
@@ -475,7 +469,6 @@ h3 + .rows { margin-top: 14px; }
   transition: background-color .25s, color .25s, transform .5s var(--ease);
 }
 .close:hover { background: var(--ink); color: var(--surface); transform: rotate(90deg); }
-.close[hidden] { display: none; }
 
 @media (min-width: 800px) {
   .cols { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(32px, 5vw, 72px); align-items: start; }
@@ -510,7 +503,6 @@ html.js .detail {
   overflow-y: auto;
   overscroll-behavior: contain;
 }
-html.js .detail[hidden] { display: none; }
 
 /* ---------- Motion ---------- */
 
@@ -546,6 +538,7 @@ html.js .sub { animation: rise .9s var(--ease) backwards; animation-delay: .75s;
   cursor: pointer;
   transition: background-color .25s, border-color .25s;
 }
+.theme[hidden] { display: none; }
 .theme:hover { background: rgb(255 255 255 / .16); border-color: rgb(255 255 255 / .5); }
 .theme svg { width: 16px; height: 16px; }
 /* Shows the mode you'd switch to: a moon in light mode, a sun in dark mode */
@@ -563,14 +556,13 @@ html.js .sub { animation: rise .9s var(--ease) backwards; animation-delay: .75s;
 
 /* ---------- Opening sequence (see assets/js/intro.js) ---------- */
 
-
 /* Black cover from the very first paint, before intro.js has built the layer */
 html.kr-intro-cover::before {
   content: '';
   position: fixed;
   inset: 0;
   z-index: 2147483000;
-  background: #0d0d0e;
+  background: var(--black);
 }
 
 /* Hold every load animation at its first frame until the photo has landed */
@@ -580,7 +572,7 @@ html.kr-intro-hold *::after {
   animation-play-state: paused !important;
 }
 
-.kr-intro {
+.kr-intro-layer {
   position: fixed;
   inset: 0;
   z-index: 2147483001;
@@ -590,7 +582,7 @@ html.kr-intro-hold *::after {
 .kr-intro__bg {
   position: absolute;
   inset: 0;
-  background: #0d0d0e;
+  background: var(--black);
 }
 
 .kr-intro__win {
@@ -614,19 +606,19 @@ html.kr-intro-hold *::after {
   border: 1px solid rgb(255 255 255 / 0.25);
   border-radius: 999px;
   background: rgb(13 13 14 / 0.4);
-  color: #f4f4f2;
+  color: var(--on-black);
   font: 500 13px/1 'Inter', system-ui, sans-serif;
   cursor: pointer;
 }
 
 .kr-intro__skip:focus-visible {
-  outline: 2px solid #a3baf0;
+  outline: 2px solid var(--blue-on-black);
   outline-offset: 3px;
 }
 
 @media (prefers-reduced-motion: reduce) {
   html.kr-intro-cover::before,
-  .kr-intro {
+  .kr-intro-layer {
     display: none;
   }
 }

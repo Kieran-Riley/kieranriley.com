@@ -18,13 +18,21 @@
   scrim.className = 'scrim';
   details.insertBefore(scrim, details.firstChild);
 
+  /* Each panel becomes a dialog with its own close button (not needed
+     without JS, where the panels are plain sections below the board). */
+  var CLOSE_ICON = '<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>';
   panels.forEach(function (p) {
     p.hidden = true;
     p.setAttribute('role', 'dialog');
     p.setAttribute('aria-modal', 'true');
     p.tabIndex = -1;
-    var c = p.querySelector('.close');
-    if (c) { c.hidden = false; c.addEventListener('click', requestClose); }
+    var c = document.createElement('button');
+    c.className = 'close';
+    c.type = 'button';
+    c.setAttribute('aria-label', 'Close');
+    c.innerHTML = CLOSE_ICON;
+    c.addEventListener('click', requestClose);
+    p.insertBefore(c, p.firstChild);
   });
   scrim.addEventListener('click', requestClose);
 
@@ -33,23 +41,22 @@
   var running = [];
 
   function byId(id) {
-    for (var i = 0; i < panels.length; i++) if (panels[i].id === id) return panels[i];
-    return null;
+    var el = id ? document.getElementById(id) : null;
+    return panels.indexOf(el) > -1 ? el : null;
   }
   function tileFor(id) {
     var a = board.querySelector('a[href="#' + id + '"]');
     return a ? a.closest('.tile') : null;
   }
   function stop() {
-    running.forEach(function (a) { try { a.cancel(); } catch (e) {} });
+    running.forEach(function (a) { a.cancel(); });
     running = [];
   }
+  /* A hash can name a panel, or something inside one (e.g. #advice in services). */
   function byHash(id) {
-    var p = byId(id);
-    if (p) return p;
     var el = id ? document.getElementById(id) : null;
-    el = el && el.closest ? el.closest('.detail') : null;
-    return el && panels.indexOf(el) > -1 ? el : null;
+    var panel = el && el.closest('.detail');
+    return panel ? byId(panel.id) : null;
   }
   /* Start frame: the panel's centre sits on the tile's centre, clipped to the tile's size. */
   function fromTile(panel, tile) {
@@ -149,7 +156,7 @@
   }
 
   document.addEventListener('click', function (e) {
-    var a = e.target.closest ? e.target.closest('a[data-open]') : null;
+    var a = e.target.closest('a[data-open]');
     if (!a || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button) return;
     var id = a.getAttribute('href').slice(1);
     if (!byId(id)) return;
@@ -196,6 +203,7 @@
   /* Light and dark mode. Follows the device until the visitor picks one;
      the choice is remembered on this device. */
   var toggle = document.querySelector('.theme');
+  var themeColor = document.querySelector('meta[name="theme-color"]');
   var darkQuery = window.matchMedia('(prefers-color-scheme: dark)');
   function mode() {
     return root.getAttribute('data-theme') || (darkQuery.matches ? 'dark' : 'light');
@@ -203,6 +211,8 @@
   function showMode() {
     var m = mode();
     root.setAttribute('data-mode', m);
+    // Match the browser bar to the page, including after a manual switch.
+    if (themeColor) themeColor.content = getComputedStyle(document.body).backgroundColor;
     if (toggle) toggle.setAttribute('aria-label', m === 'dark' ? 'Switch to light mode' : 'Switch to dark mode');
   }
   if (toggle) {

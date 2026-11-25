@@ -10,24 +10,19 @@
 //
 // The page starts the sequence from an inline <head> script that adds the
 // `kr-intro` classes. Click, tap or any key skips it. It doesn't run with
-// reduced motion, with a #link in the URL, or without JavaScript.
-// `window.krIntro` is a promise that resolves when the page is fully shown.
+// reduced motion, with a #link in the URL, or without JavaScript. If this
+// file fails to load, the onerror on its <script> tag removes the classes.
 (function () {
   var root = document.documentElement;
-  var resolveDone;
-  window.krIntro = new Promise(function (r) { resolveDone = r; });
 
   function finish() {
     root.classList.remove('kr-intro', 'kr-intro-hold', 'kr-intro-cover');
-    resolveDone();
-    document.dispatchEvent(new CustomEvent('kr-intro-done'));
   }
 
-  if (!root.classList.contains('kr-intro')) { resolveDone(); return; }
-  window.krIntroStarted = true;
+  if (!root.classList.contains('kr-intro')) return;
 
-  // The page's sunset photo is the landing spot.
-  var target = document.querySelector('img[src*="hero-1400"]');
+  // The photo marked with data-intro-target is the landing spot.
+  var target = document.querySelector('[data-intro-target]');
   if (!target) { finish(); return; }
 
   // The photo and the boxes around it are shown by the intro instead of
@@ -35,9 +30,6 @@
   var chain = [];
   for (var el = target; el && el !== document.body; el = el.parentElement) chain.push(el);
   chain.forEach(function (n) { n.style.animation = 'none'; });
-  target.style.setProperty('opacity', '1', 'important');
-  target.style.setProperty('scale', '1', 'important');
-  target.style.setProperty('transition', 'none', 'important');
 
   // The nearest ancestor that clips the photo gives the visible window and its corners.
   var clip = null;
@@ -47,7 +39,7 @@
   }
 
   var layer = document.createElement('div');
-  layer.className = 'kr-intro';
+  layer.className = 'kr-intro-layer';
   layer.setAttribute('aria-hidden', 'true');
   layer.innerHTML =
     '<div class="kr-intro__bg"></div>' +
@@ -89,12 +81,6 @@
     layer.removeEventListener('pointerdown', skip);
     layer.remove();
     finish();
-    // Hand the photo back to the page's own styles.
-    requestAnimationFrame(function () {
-      target.style.removeProperty('opacity');
-      target.style.removeProperty('scale');
-      target.style.removeProperty('transition');
-    });
   }
 
   function skip(e) {
