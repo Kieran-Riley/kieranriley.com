@@ -1,0 +1,310 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Kieran Riley. Software developer in Newcastle (Rooftop board concept)</title>
+<link rel="icon" href="../favicon.ico">
+<link rel="preload" href="../assets/fonts/inter-var.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="rooftop-board.css">
+<script>document.documentElement.classList.add('js');</script>
+</head>
+<body>
+
+<header class="top">
+  <a class="logo" href="rooftop-board.html" aria-label="Kieran Riley, home">Kieran Riley<span>.</span></a>
+  <nav aria-label="Main">
+    <a href="#about" data-open>About</a>
+    <a href="#approach" data-open>How I work</a>
+    <a href="#contact" data-open>Contact</a>
+  </nav>
+</header>
+
+<main>
+  <div class="stage" id="stage">
+    <picture class="photo">
+      <source type="image/webp" srcset="../assets/img/hero-800.webp 800w, ../assets/img/hero-1400.webp 1400w, ../assets/img/hero-2200.webp 2200w" sizes="100vw">
+      <img src="../assets/img/hero-1400.jpg" alt="Kieran on a rooftop at dusk, looking out over a lit city" width="1400" height="1867" fetchpriority="high">
+    </picture>
+
+    <div class="home" id="home">
+      <h1>
+        <span class="line" style="--l:0"><span>Software developer.</span></span>
+        <span class="line" style="--l:1"><span>Product thinker.</span></span>
+        <span class="line dim" style="--l:2"><span>Here to help you</span></span>
+        <span class="line dim" style="--l:3"><span>build what’s next.</span></span>
+      </h1>
+      <p class="sub">New idea, something you’ve started with AI, or a system that’s showing its age. I can help with the next step.</p>
+
+      <div class="ask">
+        <h2 class="q" id="q">What are you working on?<span class="caret" aria-hidden="true"></span></h2>
+        <ul class="chips" aria-labelledby="q">
+          <li style="--c:0"><a href="#new" data-open>I have an idea</a></li>
+          <li style="--c:1"><a class="key" href="#ai" data-open>I built something with AI</a></li>
+          <li style="--c:2"><a href="#modernise" data-open>I have an old system</a></li>
+          <li style="--c:3"><a href="#advice" data-open>I need advice</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <p class="where">Software developer in Newcastle</p>
+  </div>
+
+  <div class="sheets" id="sheets">
+    <div class="bar" hidden>
+      <nav class="switch" aria-label="What are you working on?">
+        <a href="#new" data-open>I have an idea</a>
+        <a href="#ai" data-open>I built something with AI</a>
+        <a href="#modernise" data-open>I have an old system</a>
+        <a href="#advice" data-open>I need advice</a>
+      </nav>
+    </div>
+
+    <div class="sheet-body">
+
+      <!-- I have an idea -->
+      <section class="board b-service" id="new" aria-labelledby="new-h">
+        <article class="tile t-feat">
+          <h2 id="new-h">Build something <span class="dim">new.</span></h2>
+          <p class="lede">From idea to working software. We work out what’s worth building first, then I build it properly.</p>
+          <ul class="rows">
+            <li>Websites and web apps</li>
+            <li>MVPs for new products</li>
+            <li>Internal tools and dashboards</li>
+            <li>Mobile apps</li>
+            <li>APIs, integrations and automations</li>
+          </ul>
+        </article>
+        <div data-tile="about"></div>
+        <article class="tile t-note t-quote" data-expand>
+          <div class="face">
+            <h3 class="quote">A developer in your corner, <span class="dim">not an agency on your payroll.</span></h3>
+            <button class="more" type="button" hidden aria-expanded="false"><span class="more-label">What that means</span><span class="go" aria-hidden="true"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M12 5v14M5 12h14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span></button>
+          </div>
+          <div class="tile-more">
+            <div class="more-in">
+              <h3 class="big">A developer in your corner, <span class="dim">not an agency on your payroll.</span></h3>
+              <p class="lede">You deal with me directly. I take on a small number of projects at a time, give straight advice and suggest what fits your budget, even if that’s just a second opinion.</p>
+              <p><a class="arrow-link" href="#approach" data-open>See how I work</a></p>
+            </div>
+            <button class="less" type="button" hidden aria-label="Close"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+          </div>
+        </article>
+        <div data-tile="contact"></div>
+      </section>
+
+      <!-- I built something with AI -->
+      <section class="board b-service" id="ai" aria-labelledby="ai-h">
+        <article class="tile t-feat t-blue">
+          <h2 id="ai-h">Take your AI-built app <span class="dim">further.</span></h2>
+          <p class="lede">Built something with Lovable, Replit, Bolt, Cursor or Codex? I’ll help you get it ready for real users.</p>
+          <ul class="rows two">
+            <li>Code and security reviews</li>
+            <li>Hosting and deployment</li>
+            <li>Logins and databases</li>
+            <li>Performance and scaling checks</li>
+            <li>Harder features</li>
+            <li>Turning it into a mobile app</li>
+          </ul>
+        </article>
+        <div data-tile="about"></div>
+        <article class="tile t-note">
+          <h3>You can keep using your AI tools.</h3>
+          <p>I can review your changes, guide you, or take on the tricky bits.</p>
+          <p class="caveat">A review finds problems early, but it can’t guarantee an app is fully secure or ready for a set number of users.</p>
+        </article>
+        <div data-tile="contact"></div>
+      </section>
+
+      <!-- I have an old system -->
+      <section class="board b-service" id="modernise" aria-labelledby="modernise-h">
+        <article class="tile t-feat">
+          <h2 id="modernise-h">Modernise existing <span class="dim">software.</span></h2>
+          <p class="lede">Bring older systems up to date without losing the things that already work.</p>
+          <ul class="rows">
+            <li>Rebuilding dated interfaces</li>
+            <li>Moving to modern frameworks</li>
+            <li>Refactoring legacy code</li>
+            <li>Replacing old integrations</li>
+            <li>Step-by-step migrations</li>
+          </ul>
+        </article>
+        <div data-tile="about"></div>
+        <article class="tile t-note t-pair">
+          <div>
+            <h3>No off-the-shelf answers</h3>
+            <p>We start with the problem. Sometimes the best fix is building less.</p>
+          </div>
+          <div>
+            <h3>Built to last</h3>
+            <p>I plan for deployment, maintenance and what happens after launch.</p>
+          </div>
+        </article>
+        <div data-tile="contact"></div>
+      </section>
+
+      <!-- I need advice -->
+      <section class="board b-service" id="advice" aria-labelledby="advice-h">
+        <article class="tile t-feat">
+          <h2 id="advice-h">Advice and ongoing <span class="dim">support.</span></h2>
+          <p class="lede">Help when you need it, without signing up to a whole project.</p>
+          <ul class="rows">
+            <li>One-off calls</li>
+            <li>Code and architecture reviews</li>
+            <li>Troubleshooting and deployment help</li>
+            <li>Help using AI coding tools</li>
+            <li>Regular check-ins, if useful</li>
+          </ul>
+        </article>
+        <div data-tile="about"></div>
+        <article class="tile t-note t-pair">
+          <div>
+            <h3>Keep building yourself</h3>
+            <p>If you want to carry on working on it, I’ll help you do that rather than make you rely on me.</p>
+          </div>
+          <div>
+            <h3>You talk to me</h3>
+            <p>No account managers and no handovers.</p>
+          </div>
+        </article>
+        <div data-tile="contact"></div>
+      </section>
+
+      <!-- About -->
+      <section class="board b-about" id="about" aria-labelledby="about-h">
+        <article class="tile t-photo">
+          <picture class="tile-bg">
+            <source type="image/webp" srcset="../assets/img/kr-600.webp 600w, ../assets/img/kr-1000.webp 1000w" sizes="(min-width: 720px) 280px, 100vw">
+            <img src="../assets/img/kr-1000.jpg" alt="Kieran at a laptop" width="1000" height="1401" loading="lazy">
+          </picture>
+          <h2 id="about-h">About <span class="dim">me.</span></h2>
+        </article>
+        <article class="tile t-text">
+          <p class="lede">I’ve been a full-stack developer for about six years, mostly at startups and scale-ups. I’ve built new products, looked after existing ones and modernised older systems.</p>
+          <p>I like being involved in what gets built, not only how. Recent work includes AI-powered features, validation systems and improving platforms that are already in use.</p>
+          <ul class="tech" aria-label="Tech I use most">
+            <li>React</li><li>React Native</li><li>Python</li><li>Django</li>
+          </ul>
+        </article>
+        <article class="tile t-ai">
+          <h3>Building with AI</h3>
+          <p>I use coding agents every day, and I’ve helped plenty of people get started with them.</p>
+          <p>AI tools let you build a lot more on your own. I help with the parts they still struggle with: architecture, security, reliability and keeping the code maintainable.</p>
+        </article>
+        <article class="tile t-agents">
+          <h3><a href="https://agentsdotne.uk" target="_blank" rel="noopener">Co-founder of agentsdotne.uk<span class="vh"> (opens in a new tab)</span></a></h3>
+          <p>Helping people and businesses get started with AI.</p>
+          <span class="go ext" aria-hidden="true"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M7 17 17 7M9 7h8v8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        </article>
+        <div data-tile="contact"></div>
+      </section>
+
+      <!-- How I work -->
+      <section class="board b-approach" id="approach" aria-labelledby="approach-h">
+        <article class="tile t-lead t-dark">
+          <h2 id="approach-h">A developer in your corner, <span class="dim">not an agency on your payroll.</span></h2>
+          <p class="lede">You deal with me directly. I take on a small number of projects at a time, give straight advice and suggest what fits your budget, even if that’s just a second opinion.</p>
+        </article>
+        <article class="tile t-how"><h3>It stays yours</h3><p>Code, hosting and accounts sit in your name, and ownership is agreed in writing before we start.</p></article>
+        <article class="tile t-how"><h3>Keep building yourself</h3><p>If you want to carry on working on it, I’ll help you do that rather than make you rely on me.</p></article>
+        <article class="tile t-how"><h3>No off-the-shelf answers</h3><p>We start with the problem. Sometimes the best fix is building less.</p></article>
+        <article class="tile t-how"><h3>You talk to me</h3><p>No account managers and no handovers.</p></article>
+        <article class="tile t-how"><h3>Built to last</h3><p>I plan for deployment, maintenance and what happens after launch.</p></article>
+        <div data-tile="contact"></div>
+      </section>
+
+      <!-- Contact -->
+      <section class="board b-contact" id="contact" aria-labelledby="contact-h">
+        <article class="tile t-lead t-dark">
+          <h2 id="contact-h">Get in <span class="dim">touch.</span></h2>
+          <p class="lede">The easiest way to reach me is a message on LinkedIn. I’ll get back to you within two working days.</p>
+          <p><a class="btn" href="https://www.linkedin.com/in/kieran-riley-b76283166/" target="_blank" rel="noopener">Message me on LinkedIn<span class="vh"> (opens in a new tab)</span></a></p>
+        </article>
+        <article class="tile t-photo t-me">
+          <picture class="tile-bg">
+            <source type="image/webp" srcset="../assets/img/kr-600.webp 600w, ../assets/img/kr-1000.webp 1000w" sizes="(min-width: 720px) 280px, 100vw">
+            <img src="../assets/img/kr-1000.jpg" alt="Kieran at a laptop" width="1000" height="1401" loading="lazy">
+          </picture>
+          <p class="cap">Kieran Riley<span>Software developer in Newcastle</span></p>
+        </article>
+        <article class="tile t-mention">
+          <h3>Useful things to mention</h3>
+          <ul class="rows">
+            <li>What you’re building or trying to fix</li>
+            <li>Where you’re up to, with a link if there is one</li>
+            <li>A rough timeline or budget, if you have one</li>
+          </ul>
+        </article>
+        <article class="tile t-links">
+          <h3>Elsewhere</h3>
+          <ul class="rows">
+            <li><a href="https://github.com/kieran-riley" target="_blank" rel="noopener">GitHub<span class="vh"> (opens in a new tab)</span></a></li>
+            <li><a href="https://www.instagram.com/kieran.riley_/" target="_blank" rel="noopener">Instagram<span class="vh"> (opens in a new tab)</span></a></li>
+          </ul>
+        </article>
+      </section>
+
+    </div>
+
+    <button class="close" type="button" hidden aria-label="Close"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+  </div>
+</main>
+
+<!-- Shared tiles. The script drops a copy into each board; without it, the About and Contact boards above already hold this content. -->
+<template id="tile-about">
+  <article class="tile t-mini t-dark" data-expand>
+    <div class="face">
+      <picture class="tile-bg">
+        <source type="image/webp" srcset="../assets/img/kr-600.webp 600w, ../assets/img/kr-1000.webp 1000w" sizes="(min-width: 720px) 280px, 100vw">
+        <img src="../assets/img/kr-1000.jpg" alt="" width="1000" height="1401" loading="lazy">
+      </picture>
+      <button class="more" type="button" aria-expanded="false"><span class="more-label">About me</span><span class="go" aria-hidden="true"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M12 5v14M5 12h14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span></button>
+    </div>
+    <div class="tile-more">
+      <div class="more-in split">
+        <picture class="more-photo">
+          <source type="image/webp" srcset="../assets/img/kr-600.webp 600w, ../assets/img/kr-1000.webp 1000w" sizes="320px">
+          <img src="../assets/img/kr-1000.jpg" alt="" width="1000" height="1401" loading="lazy">
+        </picture>
+        <div>
+          <h3 class="big">About <span class="dim">me.</span></h3>
+          <p class="lede">I’ve been a full-stack developer for about six years, mostly at startups and scale-ups. I’ve built new products, looked after existing ones and modernised older systems.</p>
+          <p>I like being involved in what gets built, not only how. Recent work includes AI-powered features, validation systems and improving platforms that are already in use.</p>
+          <ul class="tech" aria-label="Tech I use most">
+            <li>React</li><li>React Native</li><li>Python</li><li>Django</li>
+          </ul>
+          <p><a class="arrow-link" href="#about" data-open>More about me</a></p>
+        </div>
+      </div>
+      <button class="less" type="button" aria-label="Close"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+    </div>
+  </article>
+</template>
+
+<template id="tile-contact">
+  <article class="tile t-cta t-dark" data-expand>
+    <div class="face">
+      <h3><a class="ext-link" href="https://www.linkedin.com/in/kieran-riley-b76283166/" target="_blank" rel="noopener">Message me on LinkedIn<span class="vh"> (opens in a new tab)</span></a></h3>
+      <p>I’ll get back to you within two working days.</p>
+      <button class="more" type="button" aria-expanded="false"><span class="more-label">What to mention</span><span class="go" aria-hidden="true"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M12 5v14M5 12h14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span></button>
+    </div>
+    <div class="tile-more">
+      <div class="more-in">
+        <h3 class="big">Useful things <span class="dim">to mention.</span></h3>
+        <ul class="rows">
+          <li>What you’re building or trying to fix</li>
+          <li>Where you’re up to, with a link if there is one</li>
+          <li>A rough timeline or budget, if you have one</li>
+        </ul>
+        <p class="lede">The easiest way to reach me is a message on LinkedIn. I’ll get back to you within two working days.</p>
+        <p><a class="btn" href="https://www.linkedin.com/in/kieran-riley-b76283166/" target="_blank" rel="noopener">Message me on LinkedIn<span class="vh"> (opens in a new tab)</span></a></p>
+      </div>
+      <button class="less" type="button" aria-label="Close"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+    </div>
+  </article>
+</template>
+
+<script src="rooftop-board.js" onerror="document.documentElement.classList.remove('js')"></script>
+</body>
+</html>

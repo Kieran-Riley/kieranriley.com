@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Kieran Riley. Software developer in Newcastle (Journey concept)</title>
+<link rel="icon" href="../favicon.ico">
+<link rel="preload" href="../assets/fonts/inter-var.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="journey.css">
+<script>
+(function () {
+  var d = document.documentElement;
+  d.classList.add('js');
+  if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    d.classList.add('anim');
+    /* If the main script never arrives, show everything anyway. */
+    setTimeout(function () { if (!window.__journey) d.classList.remove('anim'); }, 3000);
+  }
+})();
+</script>
+</head>
+<body>
+
+<a class="skip" href="#about">Skip to content</a>
+
+<header class="top">
+  <a class="logo" href="#start" data-go aria-label="Kieran Riley, back to the start">Kieran Riley<span>.</span></a>
+  <nav class="stops" aria-label="Sections">
+    <a href="#about" data-go><i aria-hidden="true"></i>About</a>
+    <a href="#ai" data-go><i aria-hidden="true"></i>AI-built apps</a>
+    <a href="#services" data-go><i aria-hidden="true"></i>Services</a>
+    <a href="#approach" data-go><i aria-hidden="true"></i>How I work</a>
+    <a href="#contact" data-go class="last"><i aria-hidden="true"></i>Contact</a>
+  </nav>
+  <div class="progress" aria-hidden="true"><span id="progress"></span></div>
+</header>
+
+<main class="journey" id="journey">
+  <div class="viewport" id="viewport">
+    <div class="track" id="track">
+
+      <!-- 1. Hero -->
+      <section class="panel hero in-first" id="start" aria-labelledby="h-hero">
+        <picture class="photo" data-speed="-0.2">
+          <source type="image/webp" srcset="../assets/img/hero-800.webp 800w, ../assets/img/hero-1400.webp 1400w, ../assets/img/hero-2200.webp 2200w" sizes="(min-width: 720px) 125vw, 100vw">
+          <img src="../assets/img/hero-1400.jpg" alt="Kieran on a rooftop at dusk, looking out over a lit city" width="1400" height="1867" fetchpriority="high">
+        </picture>
+        <div class="inner">
+          <div class="hero-copy">
+            <h1 id="h-hero">
+              <span class="line"><span>Software developer.</span></span>
+              <span class="line"><span>Product thinker.</span></span>
+              <span class="line dim"><span>Here to help you</span></span>
+              <span class="line dim"><span>build what’s next.</span></span>
+            </h1>
+            <p class="sub" data-r>New idea, something you’ve started with AI, or a system that’s showing its age. I can help with the next step.</p>
+          </div>
+          <div class="hero-foot" data-r>
+            <p class="where">Software developer in Newcastle</p>
+            <p class="hint" aria-hidden="true">Scroll to walk across
+              <svg viewBox="0 0 28 12" width="28" height="12"><path d="M0 6h26M21 1l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 2. About -->
+      <section class="panel about" id="about" aria-labelledby="h-about">
+        <div class="inner">
+          <div class="shot">
+            <picture>
+              <source type="image/webp" srcset="../assets/img/kr-600.webp 600w, ../assets/img/kr-1000.webp 1000w" sizes="(min-width: 720px) 34vw, 100vw">
+              <img src="../assets/img/kr-1000.jpg" alt="Kieran working at a laptop" width="1000" height="1401" loading="lazy">
+            </picture>
+          </div>
+          <div class="about-copy">
+            <h2 id="h-about" data-speed="0.05" data-r>I like being involved in what gets built, <span class="dim">not only how.</span></h2>
+            <p data-r>I’ve been a full-stack developer for about six years, mostly at startups and scale-ups. I’ve built new products, looked after existing ones and modernised older systems.</p>
+            <p data-r>Recent work includes AI-powered features, validation systems and improving platforms that are already in use.</p>
+            <ul class="tech" aria-label="Main technologies" data-r>
+              <li>React</li><li>React Native</li><li>Python</li><li>Django</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- 2b. Building with AI (a narrow aside on the way to the AI panel) -->
+      <section class="panel aside" id="building" aria-labelledby="h-building">
+        <div class="inner">
+          <h2 id="h-building" data-r>Building with AI</h2>
+          <div class="aside-copy">
+            <p class="big" data-r>I use coding agents every day, and I’ve helped plenty of people get started with them.</p>
+            <p data-r>AI tools let you build a lot more on your own. I help with the parts they still struggle with: architecture, security, reliability and keeping the code maintainable.</p>
+          </div>
+          <p class="cofounder" data-r>Co-founder of <a href="https://agentsdotne.uk" target="_blank" rel="noopener">agentsdotne.uk<span class="vh"> (opens in a new tab)</span></a>, helping people and businesses get started with AI.</p>
+        </div>
+      </section>
+
+      <!-- 3. Featured service -->
+      <section class="panel ai" id="ai" aria-labelledby="h-ai">
+        <p class="ghost" aria-hidden="true" data-speed="-0.3">Lovable&ensp;Replit&ensp;Bolt&ensp;Cursor&ensp;Codex</p>
+        <div class="inner">
+          <div class="ai-lead">
+            <h2 id="h-ai" data-speed="0.05" data-r>Take your AI-built app <span class="dim">further.</span></h2>
+            <p class="lead" data-r>Built something with Lovable, Replit, Bolt, Cursor or Codex? I’ll help you get it ready for real users.</p>
+            <p class="note" data-r>You can keep using your AI tools. I can review your changes, guide you, or take on the tricky bits.</p>
+          </div>
+          <div class="ai-detail">
+            <ul class="ticks" data-r>
+              <li>Code and security reviews</li>
+              <li>Hosting and deployment</li>
+              <li>Logins and databases</li>
+              <li>Performance and scaling checks</li>
+              <li>Harder features</li>
+              <li>Turning it into a mobile app</li>
+            </ul>
+            <p class="caveat" data-r>A review finds problems early, but it can’t guarantee an app is fully secure or ready for a set number of users.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4. Other services -->
+      <section class="panel services" id="services" aria-labelledby="h-services">
+        <div class="inner">
+          <h2 id="h-services" data-speed="0.05" data-r>More ways <span class="dim">I can help.</span></h2>
+          <div class="cards">
+            <article class="card" data-r>
+              <h3>Build something new</h3>
+              <p>From idea to working software. We work out what’s worth building first, then I build it properly.</p>
+              <ul>
+                <li>Websites and web apps</li>
+                <li>MVPs for new products</li>
+                <li>Internal tools and dashboards</li>
+                <li>Mobile apps</li>
+                <li>APIs, integrations and automations</li>
+              </ul>
+            </article>
+            <article class="card" data-r>
+              <h3>Modernise existing software</h3>
+              <p>Bring older systems up to date without losing the things that already work.</p>
+              <ul>
+                <li>Rebuilding dated interfaces</li>
+                <li>Moving to modern frameworks</li>
+                <li>Refactoring legacy code</li>
+                <li>Replacing old integrations</li>
+                <li>Step-by-step migrations</li>
+              </ul>
+            </article>
+            <article class="card" data-r>
+              <h3>Advice and ongoing support</h3>
+              <p>Help when you need it, without signing up to a whole project.</p>
+              <ul>
+                <li>One-off calls</li>
+                <li>Code and architecture reviews</li>
+                <li>Troubleshooting and deployment help</li>
+                <li>Help using AI coding tools</li>
+                <li>Regular check-ins, if useful</li>
+              </ul>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- 5. How I work -->
+      <section class="panel approach" id="approach" aria-labelledby="h-approach">
+        <div class="inner">
+          <div class="corner">
+            <h2 id="h-approach" data-speed="0.05" data-r>A developer in your corner, <span class="dim">not an agency on your payroll.</span></h2>
+            <p data-r>You deal with me directly. I take on a small number of projects at a time, give straight advice and suggest what fits your budget, even if that’s just a second opinion.</p>
+          </div>
+          <div class="how">
+            <h3 class="how-title" data-r>How I work</h3>
+            <ul class="principles">
+              <li data-r><h4>It stays yours</h4><p>Code, hosting and accounts sit in your name, and ownership is agreed in writing before we start.</p></li>
+              <li data-r><h4>Keep building yourself</h4><p>If you want to carry on working on it, I’ll help you do that rather than make you rely on me.</p></li>
+              <li data-r><h4>No off-the-shelf answers</h4><p>We start with the problem. Sometimes the best fix is building less.</p></li>
+              <li data-r><h4>You talk to me</h4><p>No account managers and no handovers.</p></li>
+              <li data-r><h4>Built to last</h4><p>I plan for deployment, maintenance and what happens after launch.</p></li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- 6. Contact -->
+      <section class="panel contact" id="contact" aria-labelledby="h-contact">
+        <picture class="photo" data-speed="-0.2">
+          <source type="image/webp" srcset="../assets/img/hero-800.webp 800w, ../assets/img/hero-1400.webp 1400w, ../assets/img/hero-2200.webp 2200w" sizes="(min-width: 720px) 125vw, 100vw">
+          <img src="../assets/img/hero-1400.jpg" alt="" width="1400" height="1867" loading="lazy">
+        </picture>
+        <div class="inner">
+          <div class="reach">
+            <img class="avatar" data-r src="../assets/img/kr-square-500.webp" srcset="../assets/img/kr-square-160.webp 160w, ../assets/img/kr-square-500.webp 500w" sizes="88px" alt="" width="500" height="500" loading="lazy">
+            <h2 id="h-contact" data-speed="0.05" data-r>The easiest way to reach me is a message on LinkedIn. <span class="dim">I’ll get back to you within two working days.</span></h2>
+            <p data-r>
+              <a class="btn" href="https://www.linkedin.com/in/kieran-riley-b76283166/" target="_blank" rel="noopener">Message me on LinkedIn
+                <svg aria-hidden="true" viewBox="0 0 14 14" width="14" height="14"><path d="M3 11L11 3M5 3h6v6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                <span class="vh">(opens in a new tab)</span></a>
+            </p>
+          </div>
+          <div class="mention" data-r>
+            <h3>Useful things to mention</h3>
+            <ul>
+              <li>What you’re building or trying to fix</li>
+              <li>Where you’re up to, with a link if there is one</li>
+              <li>A rough timeline or budget, if you have one</li>
+            </ul>
+          </div>
+          <div class="end" data-r>
+            <ul class="elsewhere">
+              <li><a href="https://github.com/kieran-riley" target="_blank" rel="noopener">GitHub<span class="vh"> (opens in a new tab)</span></a></li>
+              <li><a href="https://www.instagram.com/kieran.riley_/" target="_blank" rel="noopener">Instagram<span class="vh"> (opens in a new tab)</span></a></li>
+            </ul>
+            <a class="back" href="#start" data-go>
+              <svg aria-hidden="true" viewBox="0 0 28 12" width="28" height="12"><path d="M28 6H2M7 1L2 6l5 5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              Back to the start</a>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </div>
+</main>
+
+<script src="journey.js" defer></script>
+</body>
+</html>
