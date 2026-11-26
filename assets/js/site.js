@@ -45,7 +45,8 @@
     return panels.indexOf(el) > -1 ? el : null;
   }
   function tileFor(id) {
-    var a = board.querySelector('a[href="#' + id + '"]');
+    // The tile whose own link opens this panel (not the hero's "Work with me").
+    var a = board.querySelector('.tile:not(.hero) a[href="#' + id + '"]');
     return a ? a.closest('.tile') : null;
   }
   function stop() {
